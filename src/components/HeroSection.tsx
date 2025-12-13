@@ -9,7 +9,7 @@ const HeroSection = () => {
         <div className="absolute bottom-20 left-20 w-48 h-48 rounded-full bg-gold/20 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 py-16 lg:py-24">
+      <div className="container mx-auto px-4 py-8 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8 text-center lg:text-left">
@@ -52,7 +52,7 @@ const HeroSection = () => {
         <div className="mt-20 max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="section-title">Vẽ thời trang không khó</h2>
-            <p className="section-subtitle mt-2">Hãy để Kiquy giúp bạn</p>
+            <p className="section-subtitle mt-2">Hãy để Lan Anh Bùi giúp bạn</p>
             <div className="section-divider" />
           </div>
 

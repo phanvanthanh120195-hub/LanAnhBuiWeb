@@ -64,7 +64,7 @@ const CourseContentSketch = () => {
   return (
     <section className="py-20 lg:py-28 bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="section-title">Nội dung khóa học phác thảo thời trang</h2>
             <p className="section-subtitle mt-2">7 chủ đề với 24 bài học:</p>

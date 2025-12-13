@@ -32,7 +32,7 @@ const FAQSection = () => {
   return (
     <section className="py-20 lg:py-28 bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="section-title">FAQ's</h2>
             <div className="section-divider !mx-0 !my-4" />

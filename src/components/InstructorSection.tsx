@@ -2,7 +2,7 @@ const InstructorSection = () => {
   return (
     <section className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
           {/* Content */}
           <div className="space-y-6">
             <h2 className="section-title">Xin chào!</h2>
@@ -23,10 +23,10 @@ const InstructorSection = () => {
 
           {/* Photo */}
           <div className="relative">
-            <div className="aspect-square max-w-md mx-auto rounded-sm overflow-hidden border border-border/30 bg-gradient-to-b from-secondary/50 to-cream">
+            <div className="aspect-square mx-auto rounded-sm overflow-hidden border border-border/30 bg-gradient-to-b from-secondary/50 to-cream">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-32 h-32 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="w-32 h-40 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
                     <span className="font-heading text-5xl text-primary/40 italic">K</span>
                   </div>
                   <p className="mt-4 font-heading text-lg italic text-muted-foreground">Kiquy Pham</p>

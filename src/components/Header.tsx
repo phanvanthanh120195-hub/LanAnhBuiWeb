@@ -1,0 +1,108 @@
+import { useState, useEffect } from "react";
+
+const Header = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const menuItems = [
+        { label: "TRANG CHỦ", href: "#home" },
+        { label: "BỘ SƯU TẬP", href: "#portfolio" },
+        { label: "KHÓA HỌC", href: "#courses" },
+        { label: "LIÊN HỆ", href: "#contact" },
+    ];
+
+    const handleMenuClick = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const handleLinkClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
+    return (
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-background"
+                }`}
+        >
+            <div className="container mx-auto px-4">
+                <div className="flex items-center justify-between h-20 lg:h-24">
+                    {/* Logo */}
+                    <a href="#home" className="flex-shrink-0" onClick={handleLinkClick}>
+                        <img
+                            src="/logo.png"
+                            alt="THE FASHION K."
+                            className="h-12 lg:h-16 w-auto object-contain"
+                        />
+                    </a>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center gap-8 lg:gap-12">
+                        {menuItems.map((item) => (
+                            <a
+                                key={item.label}
+                                href={item.href}
+                                className="text-sm lg:text-base font-medium text-foreground/70 hover:text-primary transition-colors duration-200 tracking-wide"
+                            >
+                                {item.label}
+                            </a>
+                        ))}
+                    </nav>
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={handleMenuClick}
+                        className="md:hidden p-2 text-foreground/70 hover:text-primary transition-colors"
+                        aria-label="Menu"
+                        aria-expanded={isMobileMenuOpen}
+                    >
+                        <svg
+                            className="w-6 h-6"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            {isMobileMenuOpen ? (
+                                <path d="M6 18L18 6M6 6l12 12" />
+                            ) : (
+                                <path d="M4 6h16M4 12h16M4 18h16" />
+                            )}
+                        </svg>
+                    </button>
+                </div>
+
+                {/* Mobile Menu */}
+                <div
+                    className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                >
+                    <nav className="py-4 space-y-2 border-t border-border/30">
+                        {menuItems.map((item) => (
+                            <a
+                                key={item.label}
+                                href={item.href}
+                                onClick={handleLinkClick}
+                                className="block py-3 px-4 text-base font-medium text-foreground/70 hover:text-primary hover:bg-secondary/30 rounded-sm transition-colors"
+                            >
+                                {item.label}
+                            </a>
+                        ))}
+                    </nav>
+                </div>
+            </div>
+        </header>
+    );
+};
+
+export default Header;
