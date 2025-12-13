@@ -1,0 +1,75 @@
+import { Button } from "@/components/ui/button";
+
+const HeroSection = () => {
+  return (
+    <section className="relative min-h-screen bg-gradient-to-b from-background to-secondary/30">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-48 h-48 rounded-full bg-gold/20 blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="space-y-8 text-center lg:text-left">
+            <div className="space-y-4">
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light italic text-foreground leading-tight">
+                Vẽ thời trang chuyên sâu
+                <br />
+                <span className="text-primary">từ cơ bản đến nâng cao</span>
+              </h1>
+              <p className="font-heading text-xl md:text-2xl italic text-muted-foreground">
+                Khám phá tài năng và phong cách riêng của bạn
+              </p>
+            </div>
+
+            <Button variant="hero" size="xl" className="mx-auto lg:mx-0">
+              Mua khóa học →
+            </Button>
+          </div>
+
+          {/* Right Content - Fashion Illustration Placeholder */}
+          <div className="relative">
+            <div className="relative mx-auto max-w-md lg:max-w-lg">
+              {/* Laptop mockup */}
+              <div className="bg-foreground/5 rounded-t-xl p-2 border border-border/50">
+                <div className="bg-background rounded-lg aspect-[4/3] flex items-center justify-center overflow-hidden">
+                  <div className="text-center p-8">
+                    <div className="w-32 h-48 mx-auto bg-gradient-to-b from-accent/20 to-primary/10 rounded-lg flex items-center justify-center">
+                      <span className="font-heading text-5xl text-primary/40 italic">K</span>
+                    </div>
+                    <p className="mt-4 text-sm text-muted-foreground italic">Fashion Illustration</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-foreground/10 h-4 rounded-b-lg" />
+            </div>
+          </div>
+        </div>
+
+        {/* Video Section */}
+        <div className="mt-20 max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="section-title">Vẽ thời trang không khó</h2>
+            <p className="section-subtitle mt-2">Hãy để Kiquy giúp bạn</p>
+            <div className="section-divider" />
+          </div>
+
+          {/* YouTube Video Embed */}
+          <div className="relative aspect-video rounded-lg overflow-hidden shadow-[var(--shadow-soft)] border border-border/30">
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="Kiquy Fashion Illustration"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
