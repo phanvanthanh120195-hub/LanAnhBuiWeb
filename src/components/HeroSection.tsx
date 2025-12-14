@@ -1,6 +1,19 @@
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
+  const scrollToPricing = () => {
+    // Find the pricing section by looking for the heading text
+    const headings = Array.from(document.querySelectorAll('h2'));
+    const pricingHeading = headings.find(h => h.textContent?.includes('Chọn khóa học phù hợp với bạn'));
+
+    if (pricingHeading) {
+      const pricingSection = pricingHeading.closest('section');
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   return (
     <section className="relative min-h-screen bg-gradient-to-b from-background to-secondary/30">
       {/* Background Pattern */}
@@ -9,7 +22,7 @@ const HeroSection = () => {
         <div className="absolute bottom-20 left-20 w-48 h-48 rounded-full bg-gold/20 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 py-8 lg:py-24">
+      <div className="container mx-auto px-4 py-8 lg:py-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8 text-center lg:text-left">
@@ -24,8 +37,13 @@ const HeroSection = () => {
               </p>
             </div>
 
-            <Button variant="hero" size="xl" className="mx-auto lg:mx-0">
-              Mua khóa học →
+            <Button
+              variant="hero"
+              size="xl"
+              className="mx-auto lg:mx-0 font-[family-name:var(--font-button)] tracking-wide relative z-20"
+              onClick={scrollToPricing}
+            >
+              MUA KHÓA HỌC →
             </Button>
           </div>
 

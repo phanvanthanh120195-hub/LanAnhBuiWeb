@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -46,6 +46,7 @@
     /* Typography */
     --font-heading: 'Cormorant Garamond', serif;
     --font-body: 'Lora', serif;
+    --font-button: 'Montserrat', sans-serif;
 
     /* Shadows */
     --shadow-soft: 0 4px 20px hsl(25 30% 20% / 0.08);
@@ -96,8 +97,17 @@
     @apply bg-background text-foreground font-body antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
+  }
+
+  p {
+    font-size: calc(1rem + 4px);
   }
 }
 
@@ -119,8 +129,7 @@
   }
 
   .btn-elegant {
-    @apply font-heading text-sm tracking-widest uppercase border border-primary/40 bg-transparent text-primary 
-           hover:bg-primary hover:text-primary-foreground transition-all duration-300 px-8 py-3;
+    @apply font-heading text-sm tracking-widest uppercase border border-primary/40 bg-transparent text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 px-8 py-3;
   }
 
   .skill-card {
@@ -133,7 +142,7 @@
   }
 
   .number-badge {
-    @apply font-heading text-sm text-primary/60 tracking-wider;
+    @apply font-heading text-base text-primary tracking-wider;
   }
 }
 
@@ -151,18 +160,24 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slideUp {
-    from { 
-      opacity: 0; 
-      transform: translateY(20px); 
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-    to { 
-      opacity: 1; 
-      transform: translateY(0); 
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }

@@ -28,6 +28,20 @@ const Header = () => {
         setIsMobileMenuOpen(false);
     };
 
+    const scrollToPricing = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const headings = Array.from(document.querySelectorAll('h2'));
+        const pricingHeading = headings.find(h => h.textContent?.includes('Chọn khóa học phù hợp với bạn'));
+
+        if (pricingHeading) {
+            const pricingSection = pricingHeading.closest('section');
+            if (pricingSection) {
+                pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setIsMobileMenuOpen(false);
+            }
+        }
+    };
+
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-background"

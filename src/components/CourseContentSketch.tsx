@@ -75,7 +75,7 @@ const CourseContentSketch = () => {
             {topics.map((topic) => (
               <div
                 key={topic.number}
-                className="grid md:grid-cols-[200px_1fr] gap-6 items-start"
+                className="grid md:grid-cols-[300px_1fr] gap-6 items-start"
               >
                 {/* Image placeholder */}
                 <div className="aspect-[4/3] bg-background rounded-sm border border-border/30 flex items-center justify-center overflow-hidden">
@@ -88,8 +88,8 @@ const CourseContentSketch = () => {
                 {/* Content */}
                 <div className="space-y-3">
                   <div className="flex items-baseline gap-4 border-b border-border/50 pb-2">
-                    <span className="number-badge">{topic.number}.</span>
-                    <h3 className="font-heading text-xl italic text-primary">
+                    <span className="number-badge text-2xl">{topic.number}.</span>
+                    <h3 className="font-heading text-2xl italic text-primary">
                       {topic.title}
                     </h3>
                   </div>
@@ -97,7 +97,7 @@ const CourseContentSketch = () => {
                     {topic.lessons.map((lesson, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-foreground/70">
                         <span className="text-primary/50">•</span>
-                        <span className="text-sm">{lesson}</span>
+                        <span className="text-base">{lesson}</span>
                       </li>
                     ))}
                   </ul>

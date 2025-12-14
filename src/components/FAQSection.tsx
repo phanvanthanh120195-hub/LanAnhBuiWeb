@@ -45,10 +45,10 @@ const FAQSection = () => {
                 value={`item-${index}`}
                 className="bg-card border border-border/50 rounded-sm px-6 data-[state=open]:shadow-[var(--shadow-card)]"
               >
-                <AccordionTrigger className="text-left font-heading text-base italic text-foreground/80 hover:text-primary py-5">
+                <AccordionTrigger className="text-left font-heading text-2xl italic text-foreground/80 hover:text-primary py-5">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-foreground/70 pb-5">
+                <AccordionContent className="text-foreground/70 pb-5 text-base">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

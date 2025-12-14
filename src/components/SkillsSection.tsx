@@ -26,11 +26,11 @@ const SkillsSection = () => {
           {skills.map((skill) => (
             <div key={skill.number} className="skill-card p-6 bg-card rounded-sm border border-border/30 hover:border-primary/30 transition-all duration-300">
               <div className="space-y-3">
-                <span className="number-badge">{skill.number}.</span>
-                <h3 className="font-heading text-lg font-medium text-foreground">{skill.title}</h3>
+                <span className="number-badge text-2xl">{skill.number}.</span>
+                <h3 className="font-heading text-2xl font-medium text-foreground h-[64px]">{skill.title}</h3>
                 <p className="text-sm text-muted-foreground italic">({skill.course})</p>
               </div>
-              
+
               {/* Skill illustration placeholder */}
               <div className="mt-6 aspect-square bg-gradient-to-b from-secondary/50 to-cream rounded-sm flex items-center justify-center">
                 <div className="w-2/3 h-2/3 border border-primary/10 rounded-sm flex items-center justify-center">

@@ -67,7 +67,7 @@ const CourseContentIllustration = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="section-title">Nội dung khóa học diễn họa thời trang</h2>
-            <p className="section-subtitle mt-2">10 chủ đề:</p>
+            <p className="section-subtitle mt-2 text-3xl">10 chủ đề:</p>
             <div className="section-divider !mx-0 !my-4" />
           </div>
 
@@ -79,14 +79,14 @@ const CourseContentIllustration = () => {
               >
                 {/* Topic Title */}
                 <div className="flex items-baseline gap-4">
-                  <span className="number-badge flex-shrink-0">{topic.number}.</span>
-                  <h3 className="font-heading text-lg italic text-foreground/80">
+                  <span className="number-badge flex-shrink-0 text-2xl">{topic.number}.</span>
+                  <h3 className="font-heading text-2xl italic text-foreground/80">
                     {topic.title}
                   </h3>
                 </div>
 
                 {/* Topic Image */}
-                <div className="aspect-[3/2] bg-secondary/30 rounded-sm overflow-hidden border border-border/30">
+                <div className="aspect-[4/3] bg-secondary/30 rounded-sm overflow-hidden border border-border/30">
                   <img
                     src={topic.image}
                     alt={topic.title}

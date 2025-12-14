@@ -1,8 +1,10 @@
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import HeroSection from "@/components/HeroSection";
+import GallerySection from "@/components/GallerySection";
 import AboutSection from "@/components/AboutSection";
 import ForWhoSection from "@/components/ForWhoSection";
+import CourseSkillsSection from "@/components/CourseSkillsSection";
 import SkillsSection from "@/components/SkillsSection";
 import CourseContentSketch from "@/components/CourseContentSketch";
 import PricingSketch from "@/components/PricingSketch";
@@ -12,8 +14,15 @@ import InstructorSection from "@/components/InstructorSection";
 import FAQSection from "@/components/FAQSection";
 import PricingPackages from "@/components/PricingPackages";
 import Footer from "@/components/Footer";
+import { CourseProvider, useCourse } from "@/contexts/CourseContext";
 
-const Index = () => {
+const IndexContent = () => {
+  const { selectedCourse } = useCourse();
+
+  // Determine which content sections to show
+  const showIllustrationContent = ["illustration", "ipad", "basicSewing"].includes(selectedCourse);
+  const showSketchContent = ["sketch", "designThinking"].includes(selectedCourse);
+
   return (
     <main className="min-h-screen pt-20 lg:pt-24">
       {/* Header Navigation */}
@@ -22,26 +31,41 @@ const Index = () => {
       {/* Section 1: Hero with Video */}
       <HeroSection />
 
-      {/* Section 2: About "Xin chào" */}
+      {/* Section 2: Gallery Collection */}
+      <GallerySection />
+
+      {/* Section 3: About "Xin chào" */}
       <AboutSection />
 
       {/* Section 3: For Who */}
       <ForWhoSection />
 
-      {/* Section 4: Skills Grid */}
+      {/* Section 4: Course Skills with Tabs */}
+      <CourseSkillsSection />
+
+      {/* Section 5: Skills Grid */}
       <SkillsSection />
 
-      {/* Section 5: Course Content Sketch */}
-      <CourseContentSketch />
+      {/* Conditional Course Content Sections */}
+      {showSketchContent && (
+        <>
+          {/* Section: Course Content Sketch */}
+          <CourseContentSketch />
 
-      {/* Section 6: Pricing Sketch */}
-      <PricingSketch />
+          {/* Section: Pricing Sketch */}
+          <PricingSketch />
+        </>
+      )}
 
-      {/* Section 7: Course Content Illustration */}
-      <CourseContentIllustration />
+      {showIllustrationContent && (
+        <>
+          {/* Section: Course Content Illustration */}
+          <CourseContentIllustration />
 
-      {/* Section 8: Pricing Illustration */}
-      <PricingIllustration />
+          {/* Section: Pricing Illustration */}
+          <PricingIllustration />
+        </>
+      )}
 
       {/* Section 9: Instructor */}
       <InstructorSection />
@@ -58,6 +82,14 @@ const Index = () => {
       {/* Scroll to Top Button */}
       <ScrollToTop />
     </main>
+  );
+};
+
+const Index = () => {
+  return (
+    <CourseProvider>
+      <IndexContent />
+    </CourseProvider>
   );
 };
 

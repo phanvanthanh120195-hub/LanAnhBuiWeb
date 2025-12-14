@@ -7,6 +7,7 @@ import CourseManager from "@/components/admin/CourseManager";
 import FAQManager from "@/components/admin/FAQManager";
 import MenuManager from "@/components/admin/MenuManager";
 import FooterManager from "@/components/admin/FooterManager";
+import IntroductionManager from "@/components/admin/IntroductionManager";
 
 const Admin = () => {
     const { user, logout } = useAuth();
@@ -47,11 +48,12 @@ const Admin = () => {
             {/* Admin Content */}
             <div className="container mx-auto px-4 py-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+                    <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
                         <TabsTrigger value="courses">Khóa học</TabsTrigger>
                         <TabsTrigger value="faq">FAQ</TabsTrigger>
                         <TabsTrigger value="menu">Menu</TabsTrigger>
                         <TabsTrigger value="footer">Footer</TabsTrigger>
+                        <TabsTrigger value="introduction">Giới thiệu</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="courses" className="space-y-4">
@@ -68,6 +70,10 @@ const Admin = () => {
 
                     <TabsContent value="footer" className="space-y-4">
                         <FooterManager />
+                    </TabsContent>
+
+                    <TabsContent value="introduction" className="space-y-4">
+                        <IntroductionManager />
                     </TabsContent>
                 </Tabs>
             </div>

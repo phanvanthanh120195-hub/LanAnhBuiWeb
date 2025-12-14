@@ -70,6 +70,32 @@ export const firestoreService = {
         }
     },
 
+    // Set a document with a specific ID (create or update)
+    set: async (collectionName: string, id: string, data: any) => {
+        try {
+            const docRef = doc(db, collectionName, id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                // Update existing document
+                await updateDoc(docRef, {
+                    ...data,
+                    updatedAt: new Date().toISOString()
+                });
+            } else {
+                // Create new document with specific ID
+                await updateDoc(docRef, {
+                    ...data,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+            }
+            return { error: null };
+        } catch (error: any) {
+            return { error: error.message };
+        }
+    },
+
     // Delete a document
     delete: async (collectionName: string, id: string) => {
         try {

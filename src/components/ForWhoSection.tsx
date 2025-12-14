@@ -20,7 +20,7 @@ const ForWhoSection = () => {
 
             <ul className="space-y-4">
               {targets.map((item, index) => (
-                <li key={index} className="flex items-start gap-3">
+                <li key={index} className="flex items-start gap-3 text-base">
                   <span className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
                   <span className="text-foreground/80">{item}</span>
                 </li>
@@ -32,7 +32,7 @@ const ForWhoSection = () => {
           <div className="relative">
             <div className="grid grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
-                <div 
+                <div
                   key={i}
                   className="aspect-[2/3] bg-gradient-to-b from-background to-secondary rounded-sm border border-border/30 flex items-center justify-center overflow-hidden"
                 >
