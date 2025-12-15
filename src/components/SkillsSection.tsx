@@ -17,12 +17,12 @@ const SkillsSection = () => {
   return (
     <section className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16" data-aos="fade-up">
           <h2 className="section-title">Kỹ năng bạn có được từ khóa học</h2>
           <div className="section-divider" />
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-aos="fade-up">
           {skills.map((skill) => (
             <div key={skill.number} className="skill-card p-6 bg-card rounded-sm border border-border/30 hover:border-primary/30 transition-all duration-300">
               <div className="space-y-3">

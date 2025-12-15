@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pencil, Trash2 } from "lucide-react";
 
 interface FooterConfig {
     id?: string;
+    title: string;
     description: string;
     email: string;
     phone: string;
@@ -19,9 +21,12 @@ interface FooterConfig {
 }
 
 const FooterManager = () => {
+    const [footers, setFooters] = useState<FooterConfig[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [footerData, setFooterData] = useState<FooterConfig>({
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [formData, setFormData] = useState<FooterConfig>({
+        title: "",
         description: "",
         email: "",
         phone: "",
@@ -33,14 +38,14 @@ const FooterManager = () => {
     });
 
     useEffect(() => {
-        loadFooterData();
+        loadFooters();
     }, []);
 
-    const loadFooterData = async () => {
+    const loadFooters = async () => {
         setLoading(true);
         const { data } = await firestoreService.getAll("footer");
-        if (data && data.length > 0) {
-            setFooterData(data[0] as FooterConfig);
+        if (data) {
+            setFooters(data as FooterConfig[]);
         }
         setLoading(false);
     };
@@ -49,17 +54,63 @@ const FooterManager = () => {
         e.preventDefault();
         setSaving(true);
 
-        if (footerData.id) {
-            await firestoreService.update("footer", footerData.id, footerData);
+        if (editingId) {
+            await firestoreService.update("footer", editingId, formData);
         } else {
-            const { id } = await firestoreService.add("footer", footerData);
-            if (id) {
-                setFooterData({ ...footerData, id });
-            }
+            await firestoreService.add("footer", formData);
         }
 
+        setFormData({
+            title: "",
+            description: "",
+            email: "",
+            phone: "",
+            address: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            copyright: ""
+        });
+        setEditingId(null);
         setSaving(false);
-        alert("Đã lưu cấu hình footer!");
+        loadFooters();
+    };
+
+    const handleEdit = (footer: FooterConfig) => {
+        setFormData({
+            title: footer.title,
+            description: footer.description,
+            email: footer.email,
+            phone: footer.phone,
+            address: footer.address,
+            facebook: footer.facebook,
+            instagram: footer.instagram,
+            youtube: footer.youtube,
+            copyright: footer.copyright
+        });
+        setEditingId(footer.id || null);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (confirm("Bạn có chắc muốn xóa cấu hình footer này?")) {
+            await firestoreService.delete("footer", id);
+            loadFooters();
+        }
+    };
+
+    const handleCancel = () => {
+        setFormData({
+            title: "",
+            description: "",
+            email: "",
+            phone: "",
+            address: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            copyright: ""
+        });
+        setEditingId(null);
     };
 
     if (loading) {
@@ -67,111 +118,209 @@ const FooterManager = () => {
     }
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Cấu hình Footer</CardTitle>
-                <CardDescription>
-                    Chỉnh sửa thông tin hiển thị ở footer trang web
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="description">Mô tả</Label>
-                        <Textarea
-                            id="description"
-                            value={footerData.description}
-                            onChange={(e) => setFooterData({ ...footerData, description: e.target.value })}
-                            placeholder="Mô tả ngắn về website..."
-                            rows={3}
-                        />
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-6">
+            <Card>
+                <CardHeader>
+                    <CardTitle>{editingId ? "Chỉnh sửa Footer" : "Thêm Footer mới"}</CardTitle>
+                    <CardDescription>
+                        Quản lý thông tin hiển thị ở footer trang web
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="title">Tiêu đề</Label>
                             <Input
-                                id="email"
-                                type="email"
-                                value={footerData.email}
-                                onChange={(e) => setFooterData({ ...footerData, email: e.target.value })}
-                                placeholder="email@example.com"
+                                id="title"
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                placeholder="Tiêu đề footer..."
+                                required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="phone">Số điện thoại</Label>
-                            <Input
-                                id="phone"
-                                value={footerData.phone}
-                                onChange={(e) => setFooterData({ ...footerData, phone: e.target.value })}
-                                placeholder="0123 456 789"
+                            <Label htmlFor="description">Mô tả</Label>
+                            <Textarea
+                                id="description"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                placeholder="Mô tả ngắn về website..."
+                                rows={3}
+                                required
                             />
                         </div>
-                    </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="address">Địa chỉ</Label>
-                        <Input
-                            id="address"
-                            value={footerData.address}
-                            onChange={(e) => setFooterData({ ...footerData, address: e.target.value })}
-                            placeholder="Địa chỉ văn phòng..."
-                        />
-                    </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    placeholder="email@example.com"
+                                    required
+                                />
+                            </div>
 
+                            <div className="space-y-2">
+                                <Label htmlFor="phone">Số điện thoại</Label>
+                                <Input
+                                    id="phone"
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    placeholder="0123 456 789"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="address">Địa chỉ</Label>
+                            <Input
+                                id="address"
+                                value={formData.address}
+                                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                placeholder="Địa chỉ văn phòng..."
+                            />
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="font-medium">Mạng xã hội</h3>
+
+                            <div className="grid md:grid-cols-3 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="facebook">Facebook URL</Label>
+                                    <Input
+                                        id="facebook"
+                                        value={formData.facebook}
+                                        onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
+                                        placeholder="https://facebook.com/..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="instagram">Instagram URL</Label>
+                                    <Input
+                                        id="instagram"
+                                        value={formData.instagram}
+                                        onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                                        placeholder="https://instagram.com/..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="youtube">YouTube URL</Label>
+                                    <Input
+                                        id="youtube"
+                                        value={formData.youtube}
+                                        onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
+                                        placeholder="https://youtube.com/..."
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="copyright">Copyright</Label>
+                            <Input
+                                id="copyright"
+                                value={formData.copyright}
+                                onChange={(e) => setFormData({ ...formData, copyright: e.target.value })}
+                                placeholder="© 2024 Your Company. All rights reserved."
+                                required
+                            />
+                        </div>
+
+                        <div className="flex gap-2">
+                            <Button type="submit" disabled={saving}>
+                                {saving ? "Đang lưu..." : editingId ? "Cập nhật" : "Thêm mới"}
+                            </Button>
+                            {editingId && (
+                                <Button type="button" variant="outline" onClick={handleCancel}>
+                                    Hủy
+                                </Button>
+                            )}
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Danh sách Footer</CardTitle>
+                    <CardDescription>
+                        {footers.length} cấu hình
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
                     <div className="space-y-4">
-                        <h3 className="font-medium">Mạng xã hội</h3>
-
-                        <div className="grid md:grid-cols-3 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="facebook">Facebook URL</Label>
-                                <Input
-                                    id="facebook"
-                                    value={footerData.facebook}
-                                    onChange={(e) => setFooterData({ ...footerData, facebook: e.target.value })}
-                                    placeholder="https://facebook.com/..."
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="instagram">Instagram URL</Label>
-                                <Input
-                                    id="instagram"
-                                    value={footerData.instagram}
-                                    onChange={(e) => setFooterData({ ...footerData, instagram: e.target.value })}
-                                    placeholder="https://instagram.com/..."
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="youtube">YouTube URL</Label>
-                                <Input
-                                    id="youtube"
-                                    value={footerData.youtube}
-                                    onChange={(e) => setFooterData({ ...footerData, youtube: e.target.value })}
-                                    placeholder="https://youtube.com/..."
-                                />
-                            </div>
-                        </div>
+                        {footers.length === 0 ? (
+                            <p className="text-center text-muted-foreground py-8">
+                                Chưa có cấu hình footer nào. Thêm cấu hình đầu tiên!
+                            </p>
+                        ) : (
+                            footers.map((footer) => (
+                                <div
+                                    key={footer.id}
+                                    className="p-4 border border-border rounded-lg space-y-3"
+                                >
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex-1 space-y-2">
+                                            <div>
+                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
+                                                <p className="text-sm text-foreground font-semibold">{footer.title}</p>
+                                            </div>
+                                            <div>
+                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
+                                                <p className="text-sm text-foreground">{footer.description}</p>
+                                            </div>
+                                            <div className="grid md:grid-cols-2 gap-2">
+                                                <div>
+                                                    <span className="text-sm font-medium text-muted-foreground">Email:</span>
+                                                    <p className="text-sm text-foreground">{footer.email}</p>
+                                                </div>
+                                                <div>
+                                                    <span className="text-sm font-medium text-muted-foreground">Phone:</span>
+                                                    <p className="text-sm text-foreground">{footer.phone}</p>
+                                                </div>
+                                            </div>
+                                            {footer.address && (
+                                                <div>
+                                                    <span className="text-sm font-medium text-muted-foreground">Địa chỉ:</span>
+                                                    <p className="text-sm text-foreground">{footer.address}</p>
+                                                </div>
+                                            )}
+                                            <div>
+                                                <span className="text-sm font-medium text-muted-foreground">Copyright:</span>
+                                                <p className="text-sm text-foreground">{footer.copyright}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => handleEdit(footer)}
+                                            >
+                                                <Pencil className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="destructive"
+                                                onClick={() => handleDelete(footer.id!)}
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="copyright">Copyright</Label>
-                        <Input
-                            id="copyright"
-                            value={footerData.copyright}
-                            onChange={(e) => setFooterData({ ...footerData, copyright: e.target.value })}
-                            placeholder="© 2024 Your Company. All rights reserved."
-                        />
-                    </div>
-
-                    <Button type="submit" disabled={saving}>
-                        {saving ? "Đang lưu..." : "Lưu cấu hình"}
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </div>
     );
 };
 

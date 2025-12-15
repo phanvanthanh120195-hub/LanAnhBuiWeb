@@ -5,22 +5,26 @@ const GallerySection = () => {
         { id: 2, span: "row-span-1", image: "/placeholder-2.jpg", alt: "Fashion sketch 2" },
         { id: 3, span: "row-span-2", image: "/placeholder-3.jpg", alt: "Fashion sketch 3" },
         { id: 4, span: "row-span-1", image: "/placeholder-4.jpg", alt: "Fashion sketch 4" },
-        { id: 5, span: "row-span-2", image: "/placeholder-5.jpg", alt: "Fashion sketch 5" },
+        { id: 5, span: "row-span-1", image: "/placeholder-5.jpg", alt: "Fashion sketch 5" },
         { id: 6, span: "row-span-1", image: "/placeholder-6.jpg", alt: "Fashion sketch 6" },
         { id: 7, span: "row-span-1", image: "/placeholder-7.jpg", alt: "Fashion sketch 7" },
         { id: 8, span: "row-span-2", image: "/placeholder-8.jpg", alt: "Fashion sketch 8" },
+        { id: 9, span: "row-span-1", image: "/placeholder-9.jpg", alt: "Fashion sketch 9" },
+        { id: 10, span: "row-span-2", image: "/placeholder-10.jpg", alt: "Fashion sketch 10" },
+        { id: 11, span: "row-span-1", image: "/placeholder-11.jpg", alt: "Fashion sketch 11" },
+        { id: 12, span: "row-span-1", image: "/placeholder-12.jpg", alt: "Fashion sketch 12" },
     ];
 
     return (
-        <section className="py-20 lg:py-28 bg-background">
+        <section id="portfolio" className="py-20 lg:py-28 bg-background">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16">
+                <div className="text-center mb-16" data-aos="fade-left">
                     <h2 className="section-title">Bộ sưu tập</h2>
                     <div className="section-divider" />
                 </div>
 
                 {/* Irregular Grid Gallery */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-4 max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-4 max-w-7xl mx-auto" data-aos="fade-right">
                     {galleryItems.map((item) => (
                         <div
                             key={item.id}

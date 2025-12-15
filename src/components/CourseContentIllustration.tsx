@@ -65,13 +65,13 @@ const CourseContentIllustration = () => {
     <section className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
+          <div className="mb-12" data-aos="fade-up">
             <h2 className="section-title">Nội dung khóa học diễn họa thời trang</h2>
             <p className="section-subtitle mt-2 text-3xl">10 chủ đề:</p>
             <div className="section-divider !mx-0 !my-4" />
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6" data-aos="fade-up">
             {topics.map((topic) => (
               <div
                 key={topic.number}

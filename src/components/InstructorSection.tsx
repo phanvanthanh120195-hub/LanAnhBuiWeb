@@ -4,7 +4,7 @@ const InstructorSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
           {/* Content */}
-          <div className="space-y-6">
+          <div className="space-y-6" data-aos="fade-left">
             <h2 className="section-title">Xin chào!</h2>
             <div className="section-divider !mx-0 !my-4" />
 
@@ -22,7 +22,7 @@ const InstructorSection = () => {
           </div>
 
           {/* Photo */}
-          <div className="relative">
+          <div className="relative" data-aos="fade-right">
             <div className="aspect-square mx-auto rounded-sm overflow-hidden border border-border/30 bg-gradient-to-b from-secondary/50 to-cream">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">

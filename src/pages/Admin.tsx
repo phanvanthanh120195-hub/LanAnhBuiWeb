@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GalleryManager from "@/components/admin/GalleryManager";
 import CourseManager from "@/components/admin/CourseManager";
 import FAQManager from "@/components/admin/FAQManager";
 import MenuManager from "@/components/admin/MenuManager";
@@ -12,7 +13,7 @@ import IntroductionManager from "@/components/admin/IntroductionManager";
 const Admin = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState("courses");
+    const [activeTab, setActiveTab] = useState("gallery");
 
     const handleLogout = async () => {
         await logout();
@@ -48,13 +49,18 @@ const Admin = () => {
             {/* Admin Content */}
             <div className="container mx-auto px-4 py-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
+                    <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
+                        <TabsTrigger value="gallery">Bộ sưu tập</TabsTrigger>
                         <TabsTrigger value="courses">Khóa học</TabsTrigger>
                         <TabsTrigger value="faq">FAQ</TabsTrigger>
                         <TabsTrigger value="menu">Menu</TabsTrigger>
                         <TabsTrigger value="footer">Footer</TabsTrigger>
                         <TabsTrigger value="introduction">Giới thiệu</TabsTrigger>
                     </TabsList>
+
+                    <TabsContent value="gallery" className="space-y-4">
+                        <GalleryManager />
+                    </TabsContent>
 
                     <TabsContent value="courses" className="space-y-4">
                         <CourseManager />

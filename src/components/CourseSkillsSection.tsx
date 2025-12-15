@@ -85,7 +85,7 @@ const CourseSkillsSection = () => {
     };
 
     return (
-        <section className="pt-20 lg:pt-28 bg-background">
+        <section id="courses" className="pt-20 lg:pt-28 bg-background">
             <div className="container mx-auto px-4">
                 {/* Title */}
                 <div className="text-center mb-16">

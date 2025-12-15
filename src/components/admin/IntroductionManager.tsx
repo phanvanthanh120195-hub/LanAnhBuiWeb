@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, X, Plus, Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Upload, X, Plus, Trash2, Pencil } from "lucide-react";
 
 interface IntroSection {
     id?: string;
@@ -22,6 +23,19 @@ interface ForWhoData {
     image1: string;
     image2: string;
     image3: string;
+}
+
+interface BankInfo {
+    bankName: string;
+    accountNumber: string;
+    accountName: string;
+    qrCodeUrl: string;
+}
+
+interface YouTubeData {
+    title: string;
+    description: string;
+    youtubeLink: string;
 }
 
 const IntroductionManager = () => {
@@ -55,8 +69,27 @@ const IntroductionManager = () => {
     }>({ preview1: "", preview2: "", preview3: "" });
     const [uploadingForWho, setUploadingForWho] = useState(false);
 
+    // Bank info states
+    const [bankInfo, setBankInfo] = useState<BankInfo>({
+        bankName: "",
+        accountNumber: "",
+        accountName: "",
+        qrCodeUrl: ""
+    });
+    const [qrCodeFile, setQrCodeFile] = useState<File | null>(null);
+    const [qrCodePreview, setQrCodePreview] = useState<string>("");
+    const [uploadingBankInfo, setUploadingBankInfo] = useState(false);
+
+    // YouTube states
+    const [youtubeData, setYoutubeData] = useState<YouTubeData>({
+        title: "",
+        description: "",
+        youtubeLink: ""
+    });
+    const [uploadingYoutube, setUploadingYoutube] = useState(false);
+
     const [loading, setLoading] = useState(true);
-    const [mainTab, setMainTab] = useState<"intro" | "forWho">("intro");
+    const [mainTab, setMainTab] = useState<"intro" | "forWho" | "bankInfo" | "youtube">("intro");
 
     useEffect(() => {
         loadData();
@@ -88,6 +121,20 @@ const IntroductionManager = () => {
                 preview2: data.image2 || "",
                 preview3: data.image3 || ""
             });
+        }
+
+        // Load Bank info
+        const { data: bankInfoFromDB } = await firestoreService.getOne("introduction", "bankInfo");
+        if (bankInfoFromDB) {
+            const data = bankInfoFromDB as BankInfo;
+            setBankInfo(data);
+            setQrCodePreview(data.qrCodeUrl || "");
+        }
+
+        // Load YouTube data
+        const { data: youtubeDataFromDB } = await firestoreService.getOne("introduction", "youtube");
+        if (youtubeDataFromDB) {
+            setYoutubeData(youtubeDataFromDB as YouTubeData);
         }
 
         setLoading(false);
@@ -242,16 +289,67 @@ const IntroductionManager = () => {
         alert("Đã lưu Dành cho ai thành công!");
     };
 
+    // Bank info handlers
+    const handleQRCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setQrCodeFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => setQrCodePreview(reader.result as string);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSubmitBankInfo = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setUploadingBankInfo(true);
+
+        let qrCodeUrl = bankInfo.qrCodeUrl;
+        if (qrCodeFile) {
+            const { url, error } = await storageService.uploadImage(qrCodeFile, "introduction/bankInfo");
+            if (error) {
+                alert("Lỗi khi tải ảnh QR: " + error);
+                setUploadingBankInfo(false);
+                return;
+            }
+            qrCodeUrl = url || "";
+        }
+
+        const dataToSave = {
+            ...bankInfo,
+            qrCodeUrl
+        };
+
+        await firestoreService.set("introduction", "bankInfo", dataToSave);
+        setQrCodeFile(null);
+        setUploadingBankInfo(false);
+        loadData();
+        alert("Đã lưu thông tin ngân hàng thành công!");
+    };
+
+    // YouTube handlers
+    const handleSubmitYoutube = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setUploadingYoutube(true);
+
+        await firestoreService.set("introduction", "youtube", youtubeData);
+        setUploadingYoutube(false);
+        loadData();
+        alert("Đã lưu thông tin YouTube thành công!");
+    };
+
     if (loading) {
         return <div className="text-center py-8">Đang tải...</div>;
     }
 
     return (
         <div className="space-y-6">
-            <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as "intro" | "forWho")}>
+            <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as "intro" | "forWho" | "bankInfo" | "youtube")}>
                 <TabsList>
                     <TabsTrigger value="intro">Xin chào</TabsTrigger>
                     <TabsTrigger value="forWho">Dành cho ai</TabsTrigger>
+                    <TabsTrigger value="bankInfo">Thông tin</TabsTrigger>
+                    <TabsTrigger value="youtube">Youtube</TabsTrigger>
                 </TabsList>
 
                 {/* Giới thiệu Tab */}
@@ -335,6 +433,69 @@ const IntroductionManager = () => {
                                             {uploading1 ? "Đang lưu..." : "Lưu Xin chào 1"}
                                         </Button>
                                     </form>
+
+                                    {/* Display current data - Always visible */}
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle>Danh sách Xin chào 1</CardTitle>
+                                            <CardDescription>
+                                                {section1.title ? "1 mục" : "0 mục"}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            {section1.title ? (
+                                                <div className="p-4 border border-border rounded-lg space-y-3">
+                                                    <div className="flex items-start justify-between gap-4">
+                                                        <div className="flex-1 space-y-2">
+                                                            <div>
+                                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
+                                                                <p className="text-sm text-foreground">{section1.title}</p>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
+                                                                <p className="text-sm text-foreground line-clamp-2">{section1.description}</p>
+                                                            </div>
+                                                            {section1.imageUrl && (
+                                                                <div>
+                                                                    <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
+                                                                    <img src={section1.imageUrl} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded border" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => {
+                                                                    // Data is already loaded
+                                                                }}
+                                                            >
+                                                                <Pencil className="w-4 h-4" />
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="destructive"
+                                                                onClick={async () => {
+                                                                    if (confirm("Bạn có chắc muốn xóa Xin chào 1?")) {
+                                                                        await firestoreService.delete("introduction", "section1");
+                                                                        setSection1({ title: "", description: "", imageUrl: "" });
+                                                                        setImagePreview1("");
+                                                                        alert("Đã xóa thành công!");
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <p className="text-center text-muted-foreground py-8">
+                                                    Chưa có dữ liệu. Thêm dữ liệu đầu tiên!
+                                                </p>
+                                            )}
+                                        </CardContent>
+                                    </Card>
                                 </TabsContent>
 
                                 {/* Section 2 */}
@@ -402,6 +563,69 @@ const IntroductionManager = () => {
                                             {uploading2 ? "Đang lưu..." : "Lưu Xin chào 2"}
                                         </Button>
                                     </form>
+
+                                    {/* Display current data - Always visible */}
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle>Danh sách Xin chào 2</CardTitle>
+                                            <CardDescription>
+                                                {section2.title ? "1 mục" : "0 mục"}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            {section2.title ? (
+                                                <div className="p-4 border border-border rounded-lg space-y-3">
+                                                    <div className="flex items-start justify-between gap-4">
+                                                        <div className="flex-1 space-y-2">
+                                                            <div>
+                                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
+                                                                <p className="text-sm text-foreground">{section2.title}</p>
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
+                                                                <p className="text-sm text-foreground line-clamp-2">{section2.description}</p>
+                                                            </div>
+                                                            {section2.imageUrl && (
+                                                                <div>
+                                                                    <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
+                                                                    <img src={section2.imageUrl} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded border" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => {
+                                                                    // Data is already loaded
+                                                                }}
+                                                            >
+                                                                <Pencil className="w-4 h-4" />
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="destructive"
+                                                                onClick={async () => {
+                                                                    if (confirm("Bạn có chắc muốn xóa Xin chào 2?")) {
+                                                                        await firestoreService.delete("introduction", "section2");
+                                                                        setSection2({ title: "", description: "", imageUrl: "" });
+                                                                        setImagePreview2("");
+                                                                        alert("Đã xóa thành công!");
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <p className="text-center text-muted-foreground py-8">
+                                                    Chưa có dữ liệu. Thêm dữ liệu đầu tiên!
+                                                </p>
+                                            )}
+                                        </CardContent>
+                                    </Card>
                                 </TabsContent>
                             </Tabs>
                         </CardContent>
@@ -417,7 +641,7 @@ const IntroductionManager = () => {
                                 Quản lý đối tượng học viên và hình ảnh minh họa
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="space-y-6">
                             <form onSubmit={handleSubmitForWho} className="space-y-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="forWhoTitle">Tiêu đề</Label>
@@ -488,6 +712,376 @@ const IntroductionManager = () => {
                                     {uploadingForWho ? "Đang lưu..." : "Lưu Dành cho ai"}
                                 </Button>
                             </form>
+
+                            {/* Display current data - Always visible */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Danh sách Dành cho ai</CardTitle>
+                                    <CardDescription>
+                                        {forWhoData.title ? "1 mục" : "0 mục"}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {forWhoData.title ? (
+                                        <div className="p-4 border border-border rounded-lg space-y-3">
+                                            <div className="flex items-start justify-between gap-4">
+                                                <div className="flex-1 space-y-2">
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
+                                                        <p className="text-sm text-foreground">{forWhoData.title}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Danh sách:</span>
+                                                        <ul className="list-disc list-inside text-sm text-foreground">
+                                                            {forWhoData.items.map((item, idx) => (
+                                                                <li key={idx}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
+                                                        <div className="flex gap-2 mt-2">
+                                                            {forWhoData.image1 && <img src={forWhoData.image1} alt="Image 1" className="w-24 h-24 object-cover rounded border" />}
+                                                            {forWhoData.image2 && <img src={forWhoData.image2} alt="Image 2" className="w-24 h-24 object-cover rounded border" />}
+                                                            {forWhoData.image3 && <img src={forWhoData.image3} alt="Image 3" className="w-24 h-24 object-cover rounded border" />}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            // Data is already loaded
+                                                        }}
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={async () => {
+                                                            if (confirm("Bạn có chắc muốn xóa Dành cho ai?")) {
+                                                                await firestoreService.delete("introduction", "forWho");
+                                                                setForWhoData({ title: "", items: [""], image1: "", image2: "", image3: "" });
+                                                                setForWhoPreviews({ preview1: "", preview2: "", preview3: "" });
+                                                                alert("Đã xóa thành công!");
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-center text-muted-foreground py-8">
+                                            Chưa có dữ liệu. Thêm dữ liệu đầu tiên!
+                                        </p>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* Bank Info Tab */}
+                <TabsContent value="bankInfo" className="mt-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Thông tin ngân hàng</CardTitle>
+                            <CardDescription>
+                                Quản lý thông tin tài khoản ngân hàng để nhận thanh toán
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+
+
+                            <form onSubmit={handleSubmitBankInfo} className="space-y-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="bankName">Ngân hàng</Label>
+                                    <Select
+                                        value={bankInfo.bankName}
+                                        onValueChange={(value) => setBankInfo({ ...bankInfo, bankName: value })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Chọn ngân hàng" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Techcombank">Techcombank</SelectItem>
+                                            <SelectItem value="TPBank">TPBank</SelectItem>
+                                            <SelectItem value="Vietcombank">Vietcombank</SelectItem>
+                                            <SelectItem value="VietinBank">VietinBank</SelectItem>
+                                            <SelectItem value="BIDV">BIDV</SelectItem>
+                                            <SelectItem value="Agribank">Agribank</SelectItem>
+                                            <SelectItem value="MB Bank">MB Bank</SelectItem>
+                                            <SelectItem value="ACB">ACB</SelectItem>
+                                            <SelectItem value="VPBank">VPBank</SelectItem>
+                                            <SelectItem value="Sacombank">Sacombank</SelectItem>
+                                            <SelectItem value="HDBank">HDBank</SelectItem>
+                                            <SelectItem value="VIB">VIB</SelectItem>
+                                            <SelectItem value="SHB">SHB</SelectItem>
+                                            <SelectItem value="SeABank">SeABank</SelectItem>
+                                            <SelectItem value="OCB">OCB</SelectItem>
+                                            <SelectItem value="MSB">MSB</SelectItem>
+                                            <SelectItem value="Eximbank">Eximbank</SelectItem>
+                                            <SelectItem value="Khác">Khác</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="accountNumber">Số tài khoản</Label>
+                                    <Input
+                                        id="accountNumber"
+                                        value={bankInfo.accountNumber}
+                                        onChange={(e) => setBankInfo({ ...bankInfo, accountNumber: e.target.value })}
+                                        placeholder="Nhập số tài khoản..."
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="accountName">Tên tài khoản</Label>
+                                    <Input
+                                        id="accountName"
+                                        value={bankInfo.accountName}
+                                        onChange={(e) => setBankInfo({ ...bankInfo, accountName: e.target.value })}
+                                        placeholder="Nhập tên tài khoản..."
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Ảnh QR Code</Label>
+                                    <div className="space-y-4">
+                                        {qrCodePreview && (
+                                            <div className="relative inline-block">
+                                                <img
+                                                    src={qrCodePreview}
+                                                    alt="QR Code Preview"
+                                                    className="w-full max-w-xs h-auto rounded-lg border border-border"
+                                                />
+                                                {qrCodeFile && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        className="absolute top-2 right-2"
+                                                        onClick={() => {
+                                                            setQrCodeFile(null);
+                                                            setQrCodePreview(bankInfo.qrCodeUrl);
+                                                        }}
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        )}
+                                        <div className="flex items-center gap-2">
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleQRCodeChange}
+                                                className="max-w-sm"
+                                            />
+                                            <Upload className="w-5 h-5 text-muted-foreground" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button type="submit" disabled={uploadingBankInfo}>
+                                    {uploadingBankInfo ? "Đang lưu..." : "Lưu thông tin"}
+                                </Button>
+                            </form>
+
+                            {/* Display current data - Always visible */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Danh sách Thông tin ngân hàng</CardTitle>
+                                    <CardDescription>
+                                        {bankInfo.bankName ? "1 mục" : "0 mục"}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {bankInfo.bankName ? (
+                                        <div className="p-4 border border-border rounded-lg space-y-3">
+                                            <div className="flex items-start justify-between gap-4">
+                                                <div className="flex-1 space-y-2">
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Ngân hàng:</span>
+                                                        <p className="text-sm text-foreground">{bankInfo.bankName}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Số tài khoản:</span>
+                                                        <p className="text-sm text-foreground">{bankInfo.accountNumber}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Tên tài khoản:</span>
+                                                        <p className="text-sm text-foreground">{bankInfo.accountName}</p>
+                                                    </div>
+                                                    {bankInfo.qrCodeUrl && (
+                                                        <div>
+                                                            <span className="text-sm font-medium text-muted-foreground">QR Code:</span>
+                                                            <img src={bankInfo.qrCodeUrl} alt="QR Code" className="mt-2 w-32 h-32 object-cover rounded border" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            // Data is already loaded
+                                                        }}
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={async () => {
+                                                            if (confirm("Bạn có chắc muốn xóa thông tin ngân hàng?")) {
+                                                                await firestoreService.delete("introduction", "bankInfo");
+                                                                setBankInfo({ bankName: "", accountNumber: "", accountName: "", qrCodeUrl: "" });
+                                                                setQrCodePreview("");
+                                                                alert("Đã xóa thành công!");
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-center text-muted-foreground py-8">
+                                            Chưa có dữ liệu. Thêm dữ liệu đầu tiên!
+                                        </p>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* YouTube Tab */}
+                <TabsContent value="youtube" className="mt-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>YouTube</CardTitle>
+                            <CardDescription>
+                                Quản lý thông tin video YouTube
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <form onSubmit={handleSubmitYoutube} className="space-y-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="youtubeTitle">Tiêu đề</Label>
+                                    <Input
+                                        id="youtubeTitle"
+                                        value={youtubeData.title}
+                                        onChange={(e) => setYoutubeData({ ...youtubeData, title: e.target.value })}
+                                        placeholder="Tiêu đề video..."
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="youtubeDescription">Mô tả</Label>
+                                    <Textarea
+                                        id="youtubeDescription"
+                                        value={youtubeData.description}
+                                        onChange={(e) => setYoutubeData({ ...youtubeData, description: e.target.value })}
+                                        placeholder="Mô tả video..."
+                                        rows={3}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="youtubeLink">Link YouTube</Label>
+                                    <Input
+                                        id="youtubeLink"
+                                        type="url"
+                                        value={youtubeData.youtubeLink}
+                                        onChange={(e) => setYoutubeData({ ...youtubeData, youtubeLink: e.target.value })}
+                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        required
+                                    />
+                                </div>
+
+                                <Button type="submit" disabled={uploadingYoutube}>
+                                    {uploadingYoutube ? "Đang lưu..." : "Lưu YouTube"}
+                                </Button>
+                            </form>
+
+                            {/* Display current data - Always visible */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Danh sách YouTube</CardTitle>
+                                    <CardDescription>
+                                        {youtubeData.title ? "1 mục" : "0 mục"}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {youtubeData.title ? (
+                                        <div className="p-4 border border-border rounded-lg space-y-3">
+                                            <div className="flex items-start justify-between gap-4">
+                                                <div className="flex-1 space-y-2">
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
+                                                        <p className="text-sm text-foreground">{youtubeData.title}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
+                                                        <p className="text-sm text-foreground">{youtubeData.description}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-sm font-medium text-muted-foreground">Link:</span>
+                                                        <a
+                                                            href={youtubeData.youtubeLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-sm text-primary hover:underline break-all"
+                                                        >
+                                                            {youtubeData.youtubeLink}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            // Data is already loaded
+                                                        }}
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={async () => {
+                                                            if (confirm("Bạn có chắc muốn xóa thông tin YouTube?")) {
+                                                                await firestoreService.delete("introduction", "youtube");
+                                                                setYoutubeData({ title: "", description: "", youtubeLink: "" });
+                                                                alert("Đã xóa thành công!");
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-center text-muted-foreground py-8">
+                                            Chưa có dữ liệu. Thêm dữ liệu đầu tiên!
+                                        </p>
+                                    )}
+                                </CardContent>
+                            </Card>
                         </CardContent>
                     </Card>
                 </TabsContent>

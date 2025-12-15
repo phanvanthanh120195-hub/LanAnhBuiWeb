@@ -24,21 +24,29 @@ const Header = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
 
-    const handleLinkClick = () => {
-        setIsMobileMenuOpen(false);
-    };
-
-    const scrollToPricing = (e: React.MouseEvent) => {
+    const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         e.preventDefault();
-        const headings = Array.from(document.querySelectorAll('h2'));
-        const pricingHeading = headings.find(h => h.textContent?.includes('Chọn khóa học phù hợp với bạn'));
+        setIsMobileMenuOpen(false);
 
-        if (pricingHeading) {
-            const pricingSection = pricingHeading.closest('section');
-            if (pricingSection) {
-                pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setIsMobileMenuOpen(false);
-            }
+        // Handle home separately
+        if (href === "#home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
+        // For other sections, find and scroll to the element
+        const targetId = href.replace("#", "");
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const headerOffset = 100; // Offset for fixed header
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
         }
     };
 
@@ -50,7 +58,7 @@ const Header = () => {
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-20 lg:h-24">
                     {/* Logo */}
-                    <a href="#home" className="flex-shrink-0" onClick={handleLinkClick}>
+                    <a href="#home" className="flex-shrink-0" onClick={(e) => handleLinkClick(e, "#home")}>
                         <img
                             src="/logo.png"
                             alt="THE FASHION K."
@@ -64,6 +72,7 @@ const Header = () => {
                             <a
                                 key={item.label}
                                 href={item.href}
+                                onClick={(e) => handleLinkClick(e, item.href)}
                                 className="text-sm lg:text-base font-medium text-foreground/70 hover:text-primary transition-colors duration-200 tracking-wide"
                             >
                                 {item.label}
@@ -106,7 +115,7 @@ const Header = () => {
                             <a
                                 key={item.label}
                                 href={item.href}
-                                onClick={handleLinkClick}
+                                onClick={(e) => handleLinkClick(e, item.href)}
                                 className="block py-3 px-4 text-base font-medium text-foreground/70 hover:text-primary hover:bg-secondary/30 rounded-sm transition-colors"
                             >
                                 {item.label}

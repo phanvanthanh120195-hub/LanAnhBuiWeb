@@ -2,7 +2,7 @@ import { Facebook, Instagram, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="py-16 bg-secondary/30 border-t border-border/30">
+    <footer id="contact" className="py-16 bg-secondary/30 border-t border-border/30">
       <div className="container mx-auto px-4">
         {/* Main Footer Content */}
         <div className="grid md:grid-cols-2 gap-12 mb-12">

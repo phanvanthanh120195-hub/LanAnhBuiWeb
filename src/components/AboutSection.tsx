@@ -4,7 +4,7 @@ const AboutSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Fashion Illustration */}
-          <div className="relative">
+          <div className="relative" data-aos="fade-left">
             <div className="aspect-[3/4] max-w-sm mx-auto bg-gradient-to-b from-blush/30 to-cream rounded-sm overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
@@ -20,7 +20,7 @@ const AboutSection = () => {
           </div>
 
           {/* Content */}
-          <div className="space-y-6">
+          <div className="space-y-6" data-aos="fade-right">
             <h2 className="section-title">Xin chào</h2>
             <div className="section-divider !mx-0 !my-4" />
 
