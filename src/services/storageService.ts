@@ -16,6 +16,15 @@ export const storageService = {
 
     // Upload image with automatic path generation
     uploadImage: async (file: File, folder: string = 'images') => {
+        // Validate file size (5MB limit)
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > MAX_FILE_SIZE) {
+            return {
+                url: null,
+                error: `Kích thước file không được vượt quá 5MB. File hiện tại: ${(file.size / 1024 / 1024).toFixed(2)}MB`
+            };
+        }
+
         const timestamp = Date.now();
         const fileName = `${timestamp}_${file.name}`;
         const path = `${folder}/${fileName}`;

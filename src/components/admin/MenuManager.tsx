@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { firestoreService } from "@/services/firestoreService";
+import { storageService } from "@/services/storageService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pencil, Trash2, GripVertical } from "lucide-react";
+import { Pencil, Trash2, GripVertical, Upload, X } from "lucide-react";
 
 interface MenuItem {
     id?: string;
@@ -13,14 +14,26 @@ interface MenuItem {
     order: number;
 }
 
+interface LogoData {
+    logoUrl: string;
+}
+
 const MenuManager = () => {
+    // Menu Items State
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [formData, setFormData] = useState<MenuItem>({ label: "", href: "", order: 0 });
 
+    // Logo State
+    const [logoData, setLogoData] = useState<LogoData>({ logoUrl: "" });
+    const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoPreview, setLogoPreview] = useState<string>("");
+    const [uploadingLogo, setUploadingLogo] = useState(false);
+
     useEffect(() => {
         loadMenuItems();
+        loadLogo();
     }, []);
 
     const loadMenuItems = async () => {
@@ -33,6 +46,70 @@ const MenuManager = () => {
         setLoading(false);
     };
 
+    const loadLogo = async () => {
+        const { data } = await firestoreService.getOne("settings", "logo");
+        if (data) {
+            const logo = data as LogoData;
+            setLogoData(logo);
+            setLogoPreview(logo.logoUrl || "");
+        }
+    };
+
+    // Logo Handlers
+    const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file size (5MB)
+        const MAX_FILE_SIZE = 5 * 1024 * 1024;
+        if (file.size > MAX_FILE_SIZE) {
+            alert(`Kích thước file không được vượt quá 5MB. File hiện tại: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+            return;
+        }
+
+        setLogoFile(file);
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setLogoPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleRemoveLogo = () => {
+        setLogoFile(null);
+        setLogoPreview("");
+        setLogoData({ logoUrl: "" });
+    };
+
+    const handleLogoSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setUploadingLogo(true);
+
+        let logoUrl = logoData.logoUrl;
+
+        // Upload new logo if selected
+        if (logoFile) {
+            const { url, error } = await storageService.uploadImage(logoFile, "logo");
+            if (error) {
+                alert("Lỗi khi tải logo: " + error);
+                setUploadingLogo(false);
+                return;
+            }
+            logoUrl = url || "";
+        }
+
+        // Save to Firestore
+        await firestoreService.set("settings", "logo", { logoUrl });
+
+        setLogoFile(null);
+        setUploadingLogo(false);
+        loadLogo();
+        alert("Đã cập nhật logo thành công!");
+    };
+
+    // Menu Handlers
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -71,6 +148,65 @@ const MenuManager = () => {
 
     return (
         <div className="space-y-6">
+            {/* Logo Management Section */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Quản lý Logo</CardTitle>
+                    <CardDescription>
+                        Upload logo cho website (hiển thị ở header)
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleLogoSubmit} className="space-y-4">
+                        {/* Logo Upload */}
+                        <div className="space-y-2">
+                            <Label htmlFor="logo">Logo (Tối đa 5MB)</Label>
+                            <Input
+                                id="logo"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleLogoSelect}
+                                disabled={uploadingLogo}
+                            />
+                        </div>
+
+                        {/* Logo Preview */}
+                        {logoPreview && (
+                            <div className="space-y-2">
+                                <div className="relative inline-block">
+                                    <img
+                                        src={logoPreview}
+                                        alt="Logo preview"
+                                        className="h-20 w-auto object-contain border border-border rounded-lg p-2 bg-white"
+                                    />
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="destructive"
+                                        className="absolute -top-2 -right-2"
+                                        onClick={handleRemoveLogo}
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        <Button type="submit" disabled={uploadingLogo || !logoFile}>
+                            {uploadingLogo ? (
+                                <>
+                                    <Upload className="w-4 h-4 mr-2 animate-spin" />
+                                    Đang tải lên...
+                                </>
+                            ) : (
+                                "Cập nhật Logo"
+                            )}
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+
+            {/* Menu Items Management Section */}
             <Card>
                 <CardHeader>
                     <CardTitle>{editingId ? "Chỉnh sửa Menu" : "Thêm Menu mới"}</CardTitle>

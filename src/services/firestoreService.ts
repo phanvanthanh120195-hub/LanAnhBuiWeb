@@ -5,6 +5,7 @@ import {
     getDoc,
     addDoc,
     updateDoc,
+    setDoc,
     deleteDoc,
     query,
     orderBy
@@ -83,8 +84,8 @@ export const firestoreService = {
                     updatedAt: new Date().toISOString()
                 });
             } else {
-                // Create new document with specific ID
-                await updateDoc(docRef, {
+                // Create new document with specific ID using setDoc
+                await setDoc(docRef, {
                     ...data,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()

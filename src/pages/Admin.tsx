@@ -13,7 +13,7 @@ import IntroductionManager from "@/components/admin/IntroductionManager";
 const Admin = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState("gallery");
+    const [activeTab, setActiveTab] = useState("menu");
 
     const handleLogout = async () => {
         await logout();
@@ -50,12 +50,12 @@ const Admin = () => {
             <div className="container mx-auto px-4 py-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                     <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
+                        <TabsTrigger value="menu">Menu</TabsTrigger>
+                        <TabsTrigger value="introduction">Giới thiệu</TabsTrigger>
                         <TabsTrigger value="gallery">Bộ sưu tập</TabsTrigger>
                         <TabsTrigger value="courses">Khóa học</TabsTrigger>
                         <TabsTrigger value="faq">FAQ</TabsTrigger>
-                        <TabsTrigger value="menu">Menu</TabsTrigger>
                         <TabsTrigger value="footer">Footer</TabsTrigger>
-                        <TabsTrigger value="introduction">Giới thiệu</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="gallery" className="space-y-4">

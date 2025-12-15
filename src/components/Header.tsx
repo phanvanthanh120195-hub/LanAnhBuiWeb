@@ -73,7 +73,7 @@ const Header = () => {
                                 key={item.label}
                                 href={item.href}
                                 onClick={(e) => handleLinkClick(e, item.href)}
-                                className="text-sm lg:text-base font-medium text-foreground/70 hover:text-primary transition-colors duration-200 tracking-wide"
+                                className="text-sm lg:text-base font-medium text-foreground/70 hover:text-primary transition-colors duration-200 tracking-wide uppercase"
                             >
                                 {item.label}
                             </a>

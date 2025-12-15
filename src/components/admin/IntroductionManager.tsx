@@ -89,7 +89,7 @@ const IntroductionManager = () => {
     const [uploadingYoutube, setUploadingYoutube] = useState(false);
 
     const [loading, setLoading] = useState(true);
-    const [mainTab, setMainTab] = useState<"intro" | "forWho" | "bankInfo" | "youtube">("intro");
+    const [mainTab, setMainTab] = useState<"intro" | "forWho" | "bankInfo" | "youtube">("youtube");
 
     useEffect(() => {
         loadData();
@@ -346,10 +346,10 @@ const IntroductionManager = () => {
         <div className="space-y-6">
             <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as "intro" | "forWho" | "bankInfo" | "youtube")}>
                 <TabsList>
+                    <TabsTrigger value="youtube">Youtube</TabsTrigger>
                     <TabsTrigger value="intro">Xin chào</TabsTrigger>
                     <TabsTrigger value="forWho">Dành cho ai</TabsTrigger>
                     <TabsTrigger value="bankInfo">Thông tin</TabsTrigger>
-                    <TabsTrigger value="youtube">Youtube</TabsTrigger>
                 </TabsList>
 
                 {/* Giới thiệu Tab */}
@@ -402,7 +402,7 @@ const IntroductionManager = () => {
                                                         <img
                                                             src={imagePreview1}
                                                             alt="Preview"
-                                                            className="w-full max-w-md h-auto rounded-lg border border-border"
+                                                            className="max-w-[200px] max-h-[300px] object-contain rounded-lg border border-border"
                                                         />
                                                         {imageFile1 && (
                                                             <Button
@@ -453,7 +453,7 @@ const IntroductionManager = () => {
                                                             </div>
                                                             <div>
                                                                 <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                                <p className="text-sm text-foreground line-clamp-2">{section1.description}</p>
+                                                                <p className="text-sm text-foreground">{section1.description}</p>
                                                             </div>
                                                             {section1.imageUrl && (
                                                                 <div>
@@ -532,7 +532,7 @@ const IntroductionManager = () => {
                                                         <img
                                                             src={imagePreview2}
                                                             alt="Preview"
-                                                            className="w-full max-w-md h-auto rounded-lg border border-border"
+                                                            className="max-w-[200px] max-h-[300px] object-contain rounded-lg border border-border"
                                                         />
                                                         {imageFile2 && (
                                                             <Button
@@ -583,7 +583,7 @@ const IntroductionManager = () => {
                                                             </div>
                                                             <div>
                                                                 <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                                <p className="text-sm text-foreground line-clamp-2">{section2.description}</p>
+                                                                <p className="text-sm text-foreground">{section2.description}</p>
                                                             </div>
                                                             {section2.imageUrl && (
                                                                 <div>
@@ -970,9 +970,6 @@ const IntroductionManager = () => {
                     <Card>
                         <CardHeader>
                             <CardTitle>YouTube</CardTitle>
-                            <CardDescription>
-                                Quản lý thông tin video YouTube
-                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <form onSubmit={handleSubmitYoutube} className="space-y-6">
@@ -1012,7 +1009,7 @@ const IntroductionManager = () => {
                                 </div>
 
                                 <Button type="submit" disabled={uploadingYoutube}>
-                                    {uploadingYoutube ? "Đang lưu..." : "Lưu YouTube"}
+                                    {uploadingYoutube ? "Đang lưu..." : "Lưu"}
                                 </Button>
                             </form>
 

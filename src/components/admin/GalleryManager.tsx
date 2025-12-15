@@ -41,15 +41,36 @@ const GalleryManager = () => {
             return;
         }
 
-        setImageFiles([...imageFiles, ...files]);
+        // Validate file sizes (5MB limit)
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+        const invalidFiles: string[] = [];
+        const validFiles: File[] = [];
 
-        // Create previews
-        const newPreviews: string[] = [];
         files.forEach(file => {
+            if (file.size > MAX_FILE_SIZE) {
+                invalidFiles.push(`${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+            } else {
+                validFiles.push(file);
+            }
+        });
+
+        if (invalidFiles.length > 0) {
+            alert(`Các file sau vượt quá giới hạn 5MB:\n${invalidFiles.join('\n')}\n\nChỉ các file hợp lệ sẽ được thêm vào.`);
+        }
+
+        if (validFiles.length === 0) {
+            return;
+        }
+
+        setImageFiles([...imageFiles, ...validFiles]);
+
+        // Create previews for valid files only
+        const newPreviews: string[] = [];
+        validFiles.forEach(file => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 newPreviews.push(reader.result as string);
-                if (newPreviews.length === files.length) {
+                if (newPreviews.length === validFiles.length) {
                     setImagePreviews([...imagePreviews, ...newPreviews]);
                 }
             };
