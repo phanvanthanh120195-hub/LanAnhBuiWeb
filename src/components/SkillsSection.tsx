@@ -71,7 +71,7 @@ const SkillsSection = () => {
                 <span className="number-badge text-2xl">{skill.number.padStart(2, '0')}.</span>
                 <h3 className="font-heading text-2xl font-medium text-foreground h-[64px] line-clamp-2">{skill.title}</h3>
                 {skill.description && (
-                  <p className="text-sm text-muted-foreground italic">{skill.description}</p>
+                  <p className="text-base text-muted-foreground italic">{skill.description}</p>
                 )}
               </div>
 

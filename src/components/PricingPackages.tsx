@@ -18,7 +18,7 @@ interface TuitionPackage {
   mode: "online" | "offline";
   originalPrice: number;
   discountPercent: number;
-  features?: string[];
+  contentList?: string[];
   description?: string;
   recommended?: boolean;
   imageUrl?: string;
@@ -66,16 +66,7 @@ const PricingPackages = () => {
     return discounted.toLocaleString("en-US").replace(/\./g, ",");
   };
 
-  const getCourseTitle = (courseType: string): string => {
-    const courseTitles: Record<string, string> = {
-      illustration: "Diễn họa thời trang",
-      sketch: "Phác thảo thời trang",
-      ipad: "Diễn họa iPad",
-      designThinking: "Tư duy thiết kế",
-      basicSewing: "Cắt may cơ bản",
-    };
-    return courseTitles[courseType] || courseType;
-  };
+
 
   const handleOpenModal = (pkg: TuitionPackage) => {
     const price = calculateDiscountedPrice(pkg.originalPrice, pkg.discountPercent);
@@ -83,7 +74,7 @@ const PricingPackages = () => {
       title: pkg.title,
       price: price,
       discount: pkg.discountPercent > 0 ? `(tiết kiệm ${pkg.discountPercent}%)` : undefined,
-      features: pkg.features || [],
+      features: pkg.contentList || [],
       description: pkg.description,
     });
     setIsModalOpen(true);
@@ -143,7 +134,7 @@ const PricingPackages = () => {
                       pkg={pkg}
                       onOpenModal={handleOpenModal}
                       calculatePrice={calculateDiscountedPrice}
-                      getCourseTitle={getCourseTitle}
+
                     />
                   </CarouselItem>
                 ))}
@@ -160,7 +151,7 @@ const PricingPackages = () => {
                     pkg={pkg}
                     onOpenModal={handleOpenModal}
                     calculatePrice={calculateDiscountedPrice}
-                    getCourseTitle={getCourseTitle}
+
                   />
                 </div>
               ))}
@@ -183,12 +174,10 @@ const PackageCard = ({
   pkg,
   onOpenModal,
   calculatePrice,
-  getCourseTitle,
 }: {
   pkg: TuitionPackage;
   onOpenModal: (pkg: TuitionPackage) => void;
   calculatePrice: (price: number, discount: number) => string;
-  getCourseTitle: (courseType: string) => string;
 }) => {
   return (
     <div
@@ -206,14 +195,14 @@ const PackageCard = ({
       {/* Illustration */}
       <div className="aspect-[4/3] mb-6 bg-gradient-to-b from-secondary/50 to-cream rounded-sm flex items-center justify-center overflow-hidden">
         {pkg.imageUrl ? (
-          <img src={pkg.imageUrl} alt={getCourseTitle(pkg.courseType)} className="w-full h-full object-cover" />
+          <img src={pkg.imageUrl} alt={pkg.title || ""} className="w-full h-full object-cover" />
         ) : (
           <span className="font-heading text-5xl text-primary/20 italic">✿</span>
         )}
       </div>
 
       <h3 className="font-heading text-xl text-center text-foreground mb-4 min-h-[56px] font-bold">
-        {getCourseTitle(pkg.courseType)}
+        {pkg.title || ""}
       </h3>
 
       <div className="text-center mb-6">
@@ -234,7 +223,7 @@ const PackageCard = ({
       </div>
 
       <ul className="space-y-3 mb-8 flex-grow">
-        {pkg.features && pkg.features.map((feature, idx) => (
+        {pkg.contentList && pkg.contentList.map((feature, idx) => (
           <li key={idx} className="flex items-start gap-3 text-sm text-foreground/70">
             <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
             <span>{feature}</span>

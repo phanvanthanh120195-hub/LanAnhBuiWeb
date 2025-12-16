@@ -7,6 +7,9 @@ import { firestoreService } from "@/services/firestoreService";
 interface Tuition {
   id?: string;
   mode: "online" | "offline";
+  title?: string;
+  contentList?: string[];
+  description?: string;
   originalPrice: number;
   discountPercent: number;
   imageUrl?: string;
@@ -65,18 +68,18 @@ const PricingIllustration = () => {
   };
 
   const courseData = {
-    title: "Bản Vẽ Thời Trang Màu Nước: Sự Hoàn Hảo trong Từng Đường Nét",
+    title: currentTuition?.title || "Bản Vẽ Thời Trang Màu Nước: Sự Hoàn Hảo trong Từng Đường Nét",
     price: currentTuition
       ? calculateDiscountedPrice(
         currentTuition.originalPrice,
         currentTuition.discountPercent
       )
       : "6,500,000",
-    features: [
+    features: currentTuition?.contentList || [
       "Khóa nâng cao dành cho những ai đã biết vẽ phác thảo muốn tả chất liệu thời trang bằng màu nước",
       "Hoàn thiện bản vẽ thời trang từ phác thảo đến lên màu",
     ],
-    description:
+    description: currentTuition?.description ||
       "Nâng cao kỹ năng vẽ thời trang của bạn với kỹ thuật màu nước chuyên nghiệp. Học cách tạo hiệu ứng chất liệu, ánh sáng và bóng đổ để tác phẩm của bạn trở nên sống động và chuyên nghiệp hơn.",
   };
 

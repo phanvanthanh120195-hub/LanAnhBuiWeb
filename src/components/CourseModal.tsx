@@ -85,7 +85,7 @@ const CourseModal = ({ isOpen, onClose, course }: CourseModalProps) => {
                                 <h4 className="font-heading text-lg text-foreground mb-3">
                                     Mô tả:
                                 </h4>
-                                <p className="text-foreground/70 leading-relaxed">
+                                <p className="text-foreground/70 leading-relaxed text-base">
                                     {course.description}
                                 </p>
                             </div>

@@ -23,6 +23,9 @@ interface CourseTopic {
 interface CourseTuition {
     id?: string;
     mode: "online" | "offline";
+    title?: string;
+    contentList?: string[];
+    description?: string;
     originalPrice: number;
     discountPercent: number;
     imageUrl: string;
@@ -32,6 +35,8 @@ type CourseTypeUnion = "sketch" | "illustration" | "ipad" | "designThinking" | "
 
 interface CourseContent {
     id?: string;
+    number: string;
+    title: string;
     items: string[];
     imageUrl: string;
     courseType: "sketch" | "illustration" | "ipad" | "designThinking" | "basicSewing";
@@ -59,6 +64,9 @@ const CourseManager = () => {
     const [editingTuitionId, setEditingTuitionId] = useState<string | null>(null);
     const [tuition, setTuition] = useState<CourseTuition>({
         mode: "online",
+        title: "",
+        contentList: [""],
+        description: "",
         originalPrice: 0,
         discountPercent: 0,
         imageUrl: ""
@@ -69,6 +77,8 @@ const CourseManager = () => {
 
     // Course Content states
     const [courseContent, setCourseContent] = useState<CourseContent>({
+        number: "",
+        title: "",
         items: [""],
         imageUrl: "",
         courseType: "illustration"
@@ -83,6 +93,13 @@ const CourseManager = () => {
         loadTopics();
         loadTuition();
         loadCourseContent();
+    }, [courseType]);
+
+    // Reset all forms when switching course types to avoid confusion
+    useEffect(() => {
+        resetForm();
+        resetTuitionForm();
+        resetContentForm();
     }, [courseType]);
 
     const loadTopics = async () => {
@@ -250,6 +267,9 @@ const CourseManager = () => {
     const resetTuitionForm = () => {
         setTuition({
             mode: "online",
+            title: "",
+            contentList: [""],
+            description: "",
             originalPrice: 0,
             discountPercent: 0,
             imageUrl: ""
@@ -285,6 +305,25 @@ const CourseManager = () => {
         setCourseContent(prev => ({
             ...prev,
             items: prev.items.map((item, i) => i === index ? value : item)
+        }));
+    };
+
+    // Tuition Content List handlers
+    const handleAddTuitionContentItem = () => {
+        setTuition(prev => ({ ...prev, contentList: [...(prev.contentList || [""]), ""] }));
+    };
+
+    const handleRemoveTuitionContentItem = (index: number) => {
+        setTuition(prev => ({
+            ...prev,
+            contentList: (prev.contentList || [""]).filter((_, i) => i !== index)
+        }));
+    };
+
+    const handleTuitionContentItemChange = (index: number, value: string) => {
+        setTuition(prev => ({
+            ...prev,
+            contentList: (prev.contentList || [""]).map((item, i) => i === index ? value : item)
         }));
     };
 
@@ -331,7 +370,7 @@ const CourseManager = () => {
     };
 
     const resetContentForm = () => {
-        setCourseContent({ items: [""], imageUrl: "", courseType });
+        setCourseContent({ number: "", title: "", items: [""], imageUrl: "", courseType });
         setEditingContentId(null);
         setContentImageFile(null);
         setContentImagePreview("");
@@ -445,6 +484,27 @@ const CourseManager = () => {
                                 {/* Nội dung Tab */}
                                 <TabsContent value="content" className="space-y-4">
                                     <form onSubmit={handleContentSubmit} className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="contentNumber">Số thứ tự</Label>
+                                            <Input
+                                                id="contentNumber"
+                                                value={courseContent.number}
+                                                onChange={(e) => setCourseContent({ ...courseContent, number: e.target.value })}
+                                                placeholder="01, 02, 03..."
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="contentTitle">Chủ đề</Label>
+                                            <Input
+                                                id="contentTitle"
+                                                value={courseContent.title}
+                                                onChange={(e) => setCourseContent({ ...courseContent, title: e.target.value })}
+                                                placeholder="Nhập chủ đề..."
+                                                required
+                                            />
+                                        </div>
 
                                         <div className="space-y-2">
                                             <div className="flex items-center justify-between">
@@ -534,6 +594,59 @@ const CourseManager = () => {
                                         {courseType !== "basicSewing" && <option value="online">Online</option>}
                                         <option value="offline">Offline</option>
                                     </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="tuitionTitle">Tiêu đề</Label>
+                                    <Input
+                                        id="tuitionTitle"
+                                        value={tuition.title || ""}
+                                        onChange={(e) => setTuition({ ...tuition, title: e.target.value })}
+                                        placeholder="Tiêu đề khóa học..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label>Danh sách nội dung</Label>
+                                        <Button type="button" size="sm" variant="outline" onClick={handleAddTuitionContentItem}>
+                                            <Plus className="w-4 h-4 mr-2" />
+                                            Thêm mục
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {(tuition.contentList || [""]).map((item, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <Input
+                                                    value={item}
+                                                    onChange={(e) => handleTuitionContentItemChange(index, e.target.value)}
+                                                    placeholder={`Mục ${index + 1}...`}
+                                                    required
+                                                />
+                                                {(tuition.contentList?.length || 0) > 1 && (
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() => handleRemoveTuitionContentItem(index)}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="tuitionDescription">Mô tả</Label>
+                                    <Textarea
+                                        id="tuitionDescription"
+                                        value={tuition.description || ""}
+                                        onChange={(e) => setTuition({ ...tuition, description: e.target.value })}
+                                        placeholder="Mô tả chi tiết về khóa học..."
+                                        rows={4}
+                                    />
                                 </div>
 
                                 <div className="grid md:grid-cols-2 gap-4">
@@ -695,9 +808,11 @@ const CourseManager = () => {
                                                 </div>
                                             )}
                                             <div className="flex-1">
-                                                <p className="text-sm font-medium mb-2">
-                                                    {content.items.length} mục nội dung
-                                                </p>
+                                                {content.title && (
+                                                    <p className="text-sm font-medium text-foreground mb-2">
+                                                        {content.number} - {content.title}
+                                                    </p>
+                                                )}
                                                 <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                                                     {content.items.map((item, idx) => (
                                                         <li key={idx}>{item}</li>

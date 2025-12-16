@@ -17,6 +17,7 @@ interface FooterConfig {
     facebook: string;
     instagram: string;
     youtube: string;
+    tiktok: string;
     copyright: string;
 }
 
@@ -34,6 +35,7 @@ const FooterManager = () => {
         facebook: "",
         instagram: "",
         youtube: "",
+        tiktok: "",
         copyright: ""
     });
 
@@ -69,6 +71,7 @@ const FooterManager = () => {
             facebook: "",
             instagram: "",
             youtube: "",
+            tiktok: "",
             copyright: ""
         });
         setEditingId(null);
@@ -86,6 +89,7 @@ const FooterManager = () => {
             facebook: footer.facebook,
             instagram: footer.instagram,
             youtube: footer.youtube,
+            tiktok: footer.tiktok || "",
             copyright: footer.copyright
         });
         setEditingId(footer.id || null);
@@ -108,6 +112,7 @@ const FooterManager = () => {
             facebook: "",
             instagram: "",
             youtube: "",
+            tiktok: "",
             copyright: ""
         });
         setEditingId(null);
@@ -189,7 +194,7 @@ const FooterManager = () => {
                         <div className="space-y-4">
                             <h3 className="font-medium">Mạng xã hội</h3>
 
-                            <div className="grid md:grid-cols-3 gap-4">
+                            <div className="grid md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="facebook">Facebook URL</Label>
                                     <Input
@@ -217,6 +222,16 @@ const FooterManager = () => {
                                         value={formData.youtube}
                                         onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
                                         placeholder="https://youtube.com/..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="tiktok">TikTok URL</Label>
+                                    <Input
+                                        id="tiktok"
+                                        value={formData.tiktok}
+                                        onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
+                                        placeholder="https://tiktok.com/..."
                                     />
                                 </div>
                             </div>
@@ -295,6 +310,63 @@ const FooterManager = () => {
                                             <div>
                                                 <span className="text-sm font-medium text-muted-foreground">Copyright:</span>
                                                 <p className="text-sm text-foreground">{footer.copyright}</p>
+                                            </div>
+                                            <div>
+                                                <span className="text-sm font-medium text-muted-foreground mb-2 block">Mạng xã hội:</span>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {footer.facebook && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Facebook:</span>
+                                                            <a
+                                                                href={footer.facebook}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.facebook}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {footer.instagram && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Instagram:</span>
+                                                            <a
+                                                                href={footer.instagram}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.instagram}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {footer.youtube && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">YouTube:</span>
+                                                            <a
+                                                                href={footer.youtube}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.youtube}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {footer.tiktok && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">TikTok:</span>
+                                                            <a
+                                                                href={footer.tiktok}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.tiktok}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="flex gap-2">

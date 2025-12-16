@@ -25,11 +25,13 @@ const AboutSection = () => {
     const loadIntroduction = async () => {
         setLoading(true);
         try {
-            const { data } = await firestoreService.getAll("introduction");
-            console.log("All introduction data:", data);
-            if (data && data.length > 2) {
-                console.log("AboutSection data (section2 - index 2):", data[2]);
-                setIntroData(data[2] as IntroductionData);
+            // Fetch section1 specifically by document ID
+            const { data, error } = await firestoreService.getOne("introduction", "section1");
+            if (data && !error) {
+                console.log("AboutSection data (section1):", data);
+                setIntroData(data as IntroductionData);
+            } else {
+                console.log("No section1 data found, using default");
             }
         } catch (error) {
             console.error("Error loading introduction:", error);

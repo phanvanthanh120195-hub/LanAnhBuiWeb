@@ -8,22 +8,44 @@ interface YouTubeData {
   youtubeLink: string;
 }
 
+interface HeaderData {
+  title: string;
+  title2: string;
+  description: string;
+  buttonText: string;
+  imageUrl: string;
+}
+
 const HeroSection = () => {
   const [youtubeData, setYoutubeData] = useState<YouTubeData>({
     title: "Vẽ thời trang không khó",
-    description: "Hãy để Lan Anh Bùi giúp bạn",
+    description: "Hãy để Phan Thành giúp bạn",
     youtubeLink: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   });
 
+  const [headerData, setHeaderData] = useState<HeaderData>({
+    title: "Vẽ thời trang chuyên sâu",
+    title2: "từ cơ bản đến nâng cao",
+    description: "Khám phá tài năng và phong cách riêng của bạn",
+    buttonText: "MUA KHÓA HỌC →",
+    imageUrl: ""
+  });
+
   useEffect(() => {
-    loadYoutubeData();
+    loadData();
   }, []);
 
-  const loadYoutubeData = async () => {
-    const { data } = await firestoreService.getOne("introduction", "youtube");
-    if (data) {
-      const youtube = data as YouTubeData;
-      setYoutubeData(youtube);
+  const loadData = async () => {
+    // Load YouTube data
+    const { data: youtubeDataFromDB } = await firestoreService.getOne("introduction", "youtube");
+    if (youtubeDataFromDB) {
+      setYoutubeData(youtubeDataFromDB as YouTubeData);
+    }
+
+    // Load Header data
+    const { data: headerDataFromDB } = await firestoreService.getOne("introduction", "header");
+    if (headerDataFromDB) {
+      setHeaderData(headerDataFromDB as HeaderData);
     }
   };
 
@@ -61,12 +83,12 @@ const HeroSection = () => {
           <div className="space-y-8 text-center lg:text-left">
             <div className="space-y-4">
               <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light italic text-foreground leading-tight">
-                Vẽ thời trang chuyên sâu
+                {headerData.title}
                 <br />
-                <span className="text-primary">từ cơ bản đến nâng cao</span>
+                <span className="text-primary">{headerData.title2}</span>
               </h1>
               <p className="font-heading text-xl md:text-2xl italic text-muted-foreground">
-                Khám phá tài năng và phong cách riêng của bạn
+                {headerData.description}
               </p>
             </div>
 
@@ -76,25 +98,38 @@ const HeroSection = () => {
               className="mx-auto lg:mx-0 font-[family-name:var(--font-button)] tracking-wide relative z-20"
               onClick={scrollToPricing}
             >
-              MUA KHÓA HỌC →
+              {headerData.buttonText}
             </Button>
           </div>
 
-          {/* Right Content - Fashion Illustration Placeholder */}
+          {/* Right Content - Fashion Illustration */}
           <div className="relative">
             <div className="relative mx-auto max-w-md lg:max-w-lg">
-              {/* Laptop mockup */}
-              <div className="bg-foreground/5 rounded-t-xl p-2 border border-border/50">
-                <div className="bg-background rounded-lg aspect-[4/3] flex items-center justify-center overflow-hidden">
-                  <div className="text-center p-8">
-                    <div className="w-32 h-48 mx-auto bg-gradient-to-b from-accent/20 to-primary/10 rounded-lg flex items-center justify-center">
-                      <span className="font-heading text-5xl text-primary/40 italic">K</span>
-                    </div>
-                    <p className="mt-4 text-sm text-muted-foreground italic">Fashion Illustration</p>
-                  </div>
+              {headerData.imageUrl ? (
+                // Display actual image from Firebase
+                <div className="rounded-xl overflow-hidden shadow-[var(--shadow-soft)] border border-border/30">
+                  <img
+                    src={headerData.imageUrl}
+                    alt={headerData.title}
+                    className="w-full h-auto object-cover"
+                  />
                 </div>
-              </div>
-              <div className="bg-foreground/10 h-4 rounded-b-lg" />
+              ) : (
+                // Fallback placeholder
+                <>
+                  <div className="bg-foreground/5 rounded-t-xl p-2 border border-border/50">
+                    <div className="bg-background rounded-lg aspect-[4/3] flex items-center justify-center overflow-hidden">
+                      <div className="text-center p-8">
+                        <div className="w-32 h-48 mx-auto bg-gradient-to-b from-accent/20 to-primary/10 rounded-lg flex items-center justify-center">
+                          <span className="font-heading text-5xl text-primary/40 italic">K</span>
+                        </div>
+                        <p className="mt-4 text-sm text-muted-foreground italic">Fashion Illustration</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-foreground/10 h-4 rounded-b-lg" />
+                </>
+              )}
             </div>
           </div>
         </div>

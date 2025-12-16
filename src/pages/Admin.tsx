@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,17 @@ import IntroductionManager from "@/components/admin/IntroductionManager";
 const Admin = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState("menu");
+
+    // Load active tab from localStorage, default to "menu"
+    const [activeTab, setActiveTab] = useState(() => {
+        const saved = localStorage.getItem("adminActiveTab");
+        return saved || "menu";
+    });
+
+    // Save active tab to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem("adminActiveTab", activeTab);
+    }, [activeTab]);
 
     const handleLogout = async () => {
         await logout();

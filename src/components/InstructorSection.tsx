@@ -25,12 +25,13 @@ const InstructorSection = () => {
     const loadIntroduction = async () => {
         setLoading(true);
         try {
-            const { data } = await firestoreService.getAll("introduction");
-            console.log("All introduction data for Instructor:", data);
-            if (data && data.length > 0) {
-                // Get first document (section1) - contains long instructor bio
-                console.log("InstructorSection data (section1 - index 0):", data[0]);
-                setIntroData(data[0] as IntroductionData);
+            // Fetch section2 specifically by document ID
+            const { data, error } = await firestoreService.getOne("introduction", "section2");
+            if (data && !error) {
+                console.log("InstructorSection data (section2):", data);
+                setIntroData(data as IntroductionData);
+            } else {
+                console.log("No section2 data found, using default");
             }
         } catch (error) {
             console.error("Error loading introduction:", error);
@@ -53,7 +54,7 @@ const InstructorSection = () => {
                         <div className="section-divider !mx-0 !my-4" />
 
                         <div className="space-y-4 text-foreground/80 leading-relaxed">
-                            <div dangerouslySetInnerHTML={{ __html: introData.description }} />
+                            <p dangerouslySetInnerHTML={{ __html: introData.description }} />
                         </div>
                     </div>
 

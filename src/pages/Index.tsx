@@ -7,6 +7,7 @@ import ForWhoSection from "@/components/ForWhoSection";
 import CourseSkillsSection from "@/components/CourseSkillsSection";
 import SkillsSection from "@/components/SkillsSection";
 import CourseContentSketch from "@/components/CourseContentSketch";
+import CourseContentDesignThinking from "@/components/CourseContentDesignThinking";
 import PricingSketch from "@/components/PricingSketch";
 import CourseContentIllustration from "@/components/CourseContentIllustration";
 import PricingIllustration from "@/components/PricingIllustration";
@@ -21,7 +22,8 @@ const IndexContent = () => {
 
   // Determine which content sections to show
   const showIllustrationContent = ["illustration", "ipad", "basicSewing"].includes(selectedCourse);
-  const showSketchContent = ["sketch", "designThinking"].includes(selectedCourse);
+  const showSketchContent = selectedCourse === "sketch";
+  const showDesignThinkingContent = selectedCourse === "designThinking";
 
   return (
     <main className="min-h-screen pt-20 lg:pt-24">
@@ -51,6 +53,16 @@ const IndexContent = () => {
         <>
           {/* Section: Course Content Sketch */}
           <CourseContentSketch />
+
+          {/* Section: Pricing Sketch */}
+          <PricingSketch />
+        </>
+      )}
+
+      {showDesignThinkingContent && (
+        <>
+          {/* Section: Course Content Design Thinking */}
+          <CourseContentDesignThinking />
 
           {/* Section: Pricing Sketch */}
           <PricingSketch />

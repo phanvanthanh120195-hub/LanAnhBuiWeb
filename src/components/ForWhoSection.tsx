@@ -64,7 +64,7 @@ const ForWhoSection = () => {
             <ul className="space-y-4">
               {targets && targets.length > 0 ? (
                 targets.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-base">
+                  <li key={index} className="flex items-start gap-3 text-[1.2rem]">
                     <span className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
                     <span className="text-foreground/80">{item}</span>
                   </li>
