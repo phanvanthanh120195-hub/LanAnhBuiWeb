@@ -559,7 +559,6 @@ const CourseManager = () => {
                                             value={tuition.discountPercent || ""}
                                             onChange={(e) => setTuition({ ...tuition, discountPercent: Number(e.target.value) })}
                                             placeholder="15"
-                                            required
                                         />
                                     </div>
                                 </div>

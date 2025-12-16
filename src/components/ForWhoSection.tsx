@@ -29,10 +29,21 @@ const ForWhoSection = () => {
   }, []);
 
   const loadForWhoData = async () => {
-    const { data } = await firestoreService.getOne("introduction", "forWho");
-    if (data) {
-      const forWho = data as ForWhoData;
-      setForWhoData(forWho);
+    try {
+      // Get all introduction documents and find the forWho document
+      const { data } = await firestoreService.getAll("introduction");
+      console.log("All introduction data for ForWho:", data);
+      if (data && data.length > 0) {
+        // Try to find document with id "forWho", otherwise use index 1
+        const forWhoDoc = data.find((doc: any) => doc.id === "forWho") || data[1];
+        console.log("ForWhoSection data (forWho document):", forWhoDoc);
+        if (forWhoDoc) {
+          setForWhoData(forWhoDoc as ForWhoData);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading for who data:", error);
+      // Keep using default data
     }
   };
 
@@ -51,12 +62,14 @@ const ForWhoSection = () => {
             </div>
 
             <ul className="space-y-4">
-              {targets.map((item, index) => (
-                <li key={index} className="flex items-start gap-3 text-base">
-                  <span className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
-                  <span className="text-foreground/80">{item}</span>
-                </li>
-              ))}
+              {targets && targets.length > 0 ? (
+                targets.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 text-base">
+                    <span className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
+                    <span className="text-foreground/80">{item}</span>
+                  </li>
+                ))
+              ) : null}
             </ul>
           </div>
 

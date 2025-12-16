@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
 import GallerySection from "@/components/GallerySection";
 import ForWhoSection from "@/components/ForWhoSection";
 import CourseSkillsSection from "@/components/CourseSkillsSection";
@@ -9,6 +10,7 @@ import CourseContentSketch from "@/components/CourseContentSketch";
 import PricingSketch from "@/components/PricingSketch";
 import CourseContentIllustration from "@/components/CourseContentIllustration";
 import PricingIllustration from "@/components/PricingIllustration";
+import InstructorSection from "@/components/InstructorSection";
 import FAQSection from "@/components/FAQSection";
 import PricingPackages from "@/components/PricingPackages";
 import Footer from "@/components/Footer";
@@ -29,7 +31,10 @@ const IndexContent = () => {
       {/* Section 1: Hero with Video */}
       <HeroSection />
 
-      {/* Section 2: Gallery Collection */}
+      {/* Section 2: About - Xin chào */}
+      <AboutSection />
+
+      {/* Section 3: Gallery Collection */}
       <GallerySection />
 
       {/* Section 3: For Who */}
@@ -61,6 +66,9 @@ const IndexContent = () => {
           <PricingIllustration />
         </>
       )}
+
+      {/* Section 6: Instructor */}
+      <InstructorSection />
 
       {/* Section 10: FAQ */}
       <FAQSection />
