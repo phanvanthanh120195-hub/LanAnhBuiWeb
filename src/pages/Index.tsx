@@ -9,6 +9,7 @@ import SkillsSection from "@/components/SkillsSection";
 import CourseContentSketch from "@/components/CourseContentSketch";
 import CourseContentDesignThinking from "@/components/CourseContentDesignThinking";
 import PricingSketch from "@/components/PricingSketch";
+import PricingDesignThinking from "@/components/PricingDesignThinking";
 import CourseContentIllustration from "@/components/CourseContentIllustration";
 import PricingIllustration from "@/components/PricingIllustration";
 import InstructorSection from "@/components/InstructorSection";
@@ -64,8 +65,8 @@ const IndexContent = () => {
           {/* Section: Course Content Design Thinking */}
           <CourseContentDesignThinking />
 
-          {/* Section: Pricing Sketch */}
-          <PricingSketch />
+          {/* Section: Pricing Design Thinking */}
+          <PricingDesignThinking />
         </>
       )}
 

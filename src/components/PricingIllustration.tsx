@@ -59,33 +59,41 @@ const PricingIllustration = () => {
     setLoading(false);
   };
 
-  // Get current tuition based on selected mode
-  const currentTuition = tuitions.find((t) => t.mode === selectedMode);
-
   const calculateDiscountedPrice = (price: number, discount: number) => {
     const discounted = price * (1 - discount / 100);
     return discounted.toLocaleString("en-US").replace(/\./g, ",");
   };
 
-  const courseData = {
-    title: currentTuition?.title || "Bản Vẽ Thời Trang Màu Nước: Sự Hoàn Hảo trong Từng Đường Nét",
-    price: currentTuition
-      ? calculateDiscountedPrice(
-        currentTuition.originalPrice,
-        currentTuition.discountPercent
-      )
-      : "6,500,000",
-    features: currentTuition?.contentList || [
-      "Khóa nâng cao dành cho những ai đã biết vẽ phác thảo muốn tả chất liệu thời trang bằng màu nước",
-      "Hoàn thiện bản vẽ thời trang từ phác thảo đến lên màu",
-    ],
-    description: currentTuition?.description ||
-      "Nâng cao kỹ năng vẽ thời trang của bạn với kỹ thuật màu nước chuyên nghiệp. Học cách tạo hiệu ứng chất liệu, ánh sáng và bóng đổ để tác phẩm của bạn trở nên sống động và chuyên nghiệp hơn.",
-  };
-
   if (loading) {
     return null;
   }
+
+  // Hide pricing section if no tuitions exist for this course
+  if (tuitions.length === 0) {
+    return null;
+  }
+
+  // Get current tuition based on selected mode
+  const currentTuition = tuitions.find((t) => t.mode === selectedMode);
+
+  // Hide if no tuition data for selected mode
+  if (!currentTuition) {
+    return null;
+  }
+
+  const courseData = {
+    title: currentTuition.title || "Bản Vẽ Thời Trang Màu Nước: Sự Hoàn Hảo trong Từng Đường Nét",
+    price: calculateDiscountedPrice(
+      currentTuition.originalPrice,
+      currentTuition.discountPercent
+    ),
+    features: currentTuition.contentList || [
+      "Khóa nâng cao dành cho những ai đã biết vẽ phác thảo muốn tả chất liệu thời trang bằng màu nước",
+      "Hoàn thiện bản vẽ thời trang từ phác thảo đến lên màu",
+    ],
+    description: currentTuition.description ||
+      "Nâng cao kỹ năng vẽ thời trang của bạn với kỹ thuật màu nước chuyên nghiệp. Học cách tạo hiệu ứng chất liệu, ánh sáng và bóng đổ để tác phẩm của bạn trở nên sống động và chuyên nghiệp hơn.",
+  };
 
   return (
     <section className="py-20 lg:py-28 bg-muted">

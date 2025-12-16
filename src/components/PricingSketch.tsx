@@ -59,30 +59,38 @@ const PricingSketch = () => {
     setLoading(false);
   };
 
-  // Get current tuition based on selected mode
-  const currentTuition = tuitions.find((t) => t.mode === selectedMode);
-
   const calculateDiscountedPrice = (price: number, discount: number) => {
     const discounted = price * (1 - discount / 100);
     return discounted.toLocaleString("en-US").replace(/\./g, ",");
   };
 
-  const courseData = {
-    title: currentTuition?.title || "Phác Thảo Thời Trang: Định Hình Phong Cách Của Bạn",
-    price: currentTuition
-      ? calculateDiscountedPrice(
-        currentTuition.originalPrice,
-        currentTuition.discountPercent
-      )
-      : "4,700,000",
-    features: currentTuition?.contentList || ["Thích hợp cho người mới bắt đầu"],
-    description: currentTuition?.description ||
-      "Khóa học này sẽ giúp bạn nắm vững các kỹ thuật phác thảo thời trang cơ bản, từ việc vẽ hình người đến cách thể hiện các chi tiết trang phục. Phù hợp cho người mới bắt đầu muốn khám phá đam mê thiết kế thời trang.",
-  };
-
   if (loading) {
     return null;
   }
+
+  // Hide pricing section if no tuitions exist for this course
+  if (tuitions.length === 0) {
+    return null;
+  }
+
+  // Get current tuition based on selected mode
+  const currentTuition = tuitions.find((t) => t.mode === selectedMode);
+
+  // Hide if no tuition data for selected mode
+  if (!currentTuition) {
+    return null;
+  }
+
+  const courseData = {
+    title: currentTuition.title || "Phác Thảo Thời Trang: Định Hình Phong Cách Của Bạn",
+    price: calculateDiscountedPrice(
+      currentTuition.originalPrice,
+      currentTuition.discountPercent
+    ),
+    features: currentTuition.contentList || ["Thích hợp cho người mới bắt đầu"],
+    description: currentTuition.description ||
+      "Khóa học này sẽ giúp bạn nắm vững các kỹ thuật phác thảo thời trang cơ bản, từ việc vẽ hình người đến cách thể hiện các chi tiết trang phục. Phù hợp cho người mới bắt đầu muốn khám phá đam mê thiết kế thời trang.",
+  };
 
   return (
     <section className="py-20 lg:py-28 bg-muted">

@@ -84,6 +84,11 @@ const PricingPackages = () => {
     return null;
   }
 
+  // Hide pricing section if no packages exist
+  if (packages.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
