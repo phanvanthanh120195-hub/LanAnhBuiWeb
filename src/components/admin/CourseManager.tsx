@@ -32,10 +32,9 @@ type CourseTypeUnion = "sketch" | "illustration" | "ipad" | "designThinking" | "
 
 interface CourseContent {
     id?: string;
-    title: string;
     items: string[];
     imageUrl: string;
-    courseType: "sketch" | "illustration" | "ipad";
+    courseType: "sketch" | "illustration" | "ipad" | "designThinking" | "basicSewing";
 }
 
 const CourseManager = () => {
@@ -70,7 +69,6 @@ const CourseManager = () => {
 
     // Course Content states
     const [courseContent, setCourseContent] = useState<CourseContent>({
-        title: "",
         items: [""],
         imageUrl: "",
         courseType: "illustration"
@@ -333,7 +331,7 @@ const CourseManager = () => {
     };
 
     const resetContentForm = () => {
-        setCourseContent({ title: "", items: [""], imageUrl: "", courseType });
+        setCourseContent({ items: [""], imageUrl: "", courseType });
         setEditingContentId(null);
         setContentImageFile(null);
         setContentImagePreview("");
@@ -447,16 +445,6 @@ const CourseManager = () => {
                                 {/* Nội dung Tab */}
                                 <TabsContent value="content" className="space-y-4">
                                     <form onSubmit={handleContentSubmit} className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="contentTitle">Tiêu đề</Label>
-                                            <Input
-                                                id="contentTitle"
-                                                value={courseContent.title}
-                                                onChange={(e) => setCourseContent({ ...courseContent, title: e.target.value })}
-                                                placeholder="Nhập tiêu đề nội dung..."
-                                                required
-                                            />
-                                        </div>
 
                                         <div className="space-y-2">
                                             <div className="flex items-center justify-between">
@@ -699,7 +687,7 @@ const CourseManager = () => {
                                             {content.imageUrl ? (
                                                 <img
                                                     src={content.imageUrl}
-                                                    alt={content.title}
+                                                    alt="Content image"
                                                     className="w-16 h-16 object-cover rounded"
                                                 />
                                             ) : (
@@ -708,10 +696,14 @@ const CourseManager = () => {
                                                 </div>
                                             )}
                                             <div className="flex-1">
-                                                <p className="font-medium">{content.title}</p>
-                                                <p className="text-sm text-muted-foreground">
+                                                <p className="text-sm font-medium mb-2">
                                                     {content.items.length} mục nội dung
                                                 </p>
+                                                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                                                    {content.items.map((item, idx) => (
+                                                        <li key={idx}>{item}</li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                             <div className="flex gap-2">
                                                 <Button

@@ -1,11 +1,43 @@
+import { useState, useEffect } from "react";
+import { firestoreService } from "@/services/firestoreService";
+
+interface ForWhoData {
+  title: string;
+  items: string[];
+  image1: string;
+  image2: string;
+  image3: string;
+}
+
 const ForWhoSection = () => {
-  const targets = [
-    "Bạn muốn trở thành nhà thiết kế thời trang nổi tiếng",
-    "Bạn muốn thành công trong lĩnh vực kinh doanh thời trang và họa cụ",
-    "Bạn muốn kiếm tiền từ nghề minh họa tự do (freelance)",
-    "Bạn quan tâm đến thời trang và nghệ thuật và muốn khám phá một sở thích mới",
-    "Đơn giản bạn là fan của Kiquy :)",
-  ];
+  const [forWhoData, setForWhoData] = useState<ForWhoData>({
+    title: "Khóa học này dành cho ai?",
+    items: [
+      "Bạn muốn trở thành nhà thiết kế thời trang nổi tiếng",
+      "Bạn muốn thành công trong lĩnh vực kinh doanh thời trang và họa cụ",
+      "Bạn muốn kiếm tiền từ nghề minh họa tự do (freelance)",
+      "Bạn quan tâm đến thời trang và nghệ thuật và muốn khám phá một sở thích mới",
+      "Đơn giản bạn là fan của Kiquy :)",
+    ],
+    image1: "",
+    image2: "",
+    image3: ""
+  });
+
+  useEffect(() => {
+    loadForWhoData();
+  }, []);
+
+  const loadForWhoData = async () => {
+    const { data } = await firestoreService.getOne("introduction", "forWho");
+    if (data) {
+      const forWho = data as ForWhoData;
+      setForWhoData(forWho);
+    }
+  };
+
+  const targets = forWhoData.items;
+  const images = [forWhoData.image1, forWhoData.image2, forWhoData.image3];
 
   return (
     <section className="py-20 lg:py-28 bg-secondary/30">
@@ -14,7 +46,7 @@ const ForWhoSection = () => {
           {/* Content */}
           <div className="space-y-8">
             <div>
-              <h2 className="section-title">Khóa học này dành cho ai?</h2>
+              <h2 className="section-title">{forWhoData.title}</h2>
               <div className="section-divider !mx-0 !my-4" />
             </div>
 
@@ -31,16 +63,24 @@ const ForWhoSection = () => {
           {/* Fashion Illustration Grid */}
           <div className="relative">
             <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
+              {images.map((imageUrl, i) => (
                 <div
                   key={i}
                   className="aspect-[2/3] bg-gradient-to-b from-background to-secondary rounded-sm border border-border/30 flex items-center justify-center overflow-hidden"
                 >
-                  <div className="text-center p-2">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="font-heading text-4xl text-primary/20 italic">♀</span>
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={`Fashion illustration ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-center p-2">
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="font-heading text-4xl text-primary/20 italic">♀</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>

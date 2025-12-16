@@ -1,8 +1,23 @@
 import { useState, useEffect } from "react";
+import { firestoreService } from "@/services/firestoreService";
+
+interface MenuItem {
+    id?: string;
+    label: string;
+    href: string;
+    order: number;
+}
+
+interface LogoData {
+    logoUrl: string;
+}
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [logoUrl, setLogoUrl] = useState<string>("/logo.png"); // fallback
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -13,12 +28,28 @@ const Header = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const menuItems = [
-        { label: "TRANG CHỦ", href: "#home" },
-        { label: "BỘ SƯU TẬP", href: "#portfolio" },
-        { label: "KHÓA HỌC", href: "#courses" },
-        { label: "LIÊN HỆ", href: "#contact" },
-    ];
+    useEffect(() => {
+        loadMenuItems();
+        loadLogo();
+    }, []);
+
+    const loadMenuItems = async () => {
+        setLoading(true);
+        const { data } = await firestoreService.getAll("menu");
+        if (data) {
+            const sorted = (data as MenuItem[]).sort((a, b) => a.order - b.order);
+            setMenuItems(sorted);
+        }
+        setLoading(false);
+    };
+
+    const loadLogo = async () => {
+        const { data } = await firestoreService.getOne("settings", "logo");
+        if (data) {
+            const logo = data as LogoData;
+            setLogoUrl(logo.logoUrl || "/logo.png");
+        }
+    };
 
     const handleMenuClick = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -60,9 +91,9 @@ const Header = () => {
                     {/* Logo */}
                     <a href="#home" className="flex-shrink-0" onClick={(e) => handleLinkClick(e, "#home")}>
                         <img
-                            src="/logo.png"
+                            src={logoUrl}
                             alt="THE FASHION K."
-                            className="h-12 lg:h-16 w-auto object-contain"
+                            className="h-12 lg:h-16 w-auto object-contain border-0"
                         />
                     </a>
 

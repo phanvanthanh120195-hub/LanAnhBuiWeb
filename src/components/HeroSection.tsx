@@ -1,6 +1,39 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { firestoreService } from "@/services/firestoreService";
+
+interface YouTubeData {
+  title: string;
+  description: string;
+  youtubeLink: string;
+}
 
 const HeroSection = () => {
+  const [youtubeData, setYoutubeData] = useState<YouTubeData>({
+    title: "Vẽ thời trang không khó",
+    description: "Hãy để Lan Anh Bùi giúp bạn",
+    youtubeLink: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  });
+
+  useEffect(() => {
+    loadYoutubeData();
+  }, []);
+
+  const loadYoutubeData = async () => {
+    const { data } = await firestoreService.getOne("introduction", "youtube");
+    if (data) {
+      const youtube = data as YouTubeData;
+      setYoutubeData(youtube);
+    }
+  };
+
+  // Convert YouTube watch URL to embed URL
+  const getYoutubeEmbedUrl = (url: string) => {
+    if (url.includes('/embed/')) return url; // Already embed URL
+    const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)?.[1];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
+
   const scrollToPricing = () => {
     // Find the pricing section by looking for the heading text
     const headings = Array.from(document.querySelectorAll('h2'));
@@ -69,8 +102,8 @@ const HeroSection = () => {
         {/* Video Section */}
         <div className="mt-20 max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="section-title">Vẽ thời trang không khó</h2>
-            <p className="section-subtitle mt-2">Hãy để Lan Anh Bùi giúp bạn</p>
+            <h2 className="section-title">{youtubeData.title}</h2>
+            <p className="section-subtitle mt-2">{youtubeData.description}</p>
             <div className="section-divider" />
           </div>
 
@@ -78,7 +111,7 @@ const HeroSection = () => {
           <div className="relative aspect-video rounded-lg overflow-hidden shadow-[var(--shadow-soft)] border border-border/30">
             <iframe
               className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              src={getYoutubeEmbedUrl(youtubeData.youtubeLink)}
               title="Kiquy Fashion Illustration"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

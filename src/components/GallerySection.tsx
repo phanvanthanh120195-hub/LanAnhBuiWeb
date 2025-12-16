@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { firestoreService } from "@/services/firestoreService";
+import AOS from "aos";
 
 interface GalleryData {
     images: string[];
@@ -21,6 +22,8 @@ const GallerySection = () => {
             setGalleryImages(galleryData.images || []);
         }
         setLoading(false);
+        // Refresh AOS after loading data to ensure animations work
+        setTimeout(() => AOS.refresh(), 100);
     };
 
     // Define grid spans for irregular layout (repeating pattern for up to 11 images)
@@ -40,7 +43,7 @@ const GallerySection = () => {
     return (
         <section id="portfolio" className="py-20 lg:py-28 bg-background">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16" data-aos="fade-left">
+                <div className="text-center mb-16">
                     <h2 className="section-title">Bộ sưu tập</h2>
                     <div className="section-divider" />
                 </div>
@@ -55,7 +58,7 @@ const GallerySection = () => {
                         Chưa có ảnh nào. Tải lên ảnh đầu tiên!
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-4 max-w-7xl mx-auto" data-aos="fade-right">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] gap-4 max-w-7xl mx-auto">
                         {galleryItems.map((item) => (
                             <div
                                 key={item.id}

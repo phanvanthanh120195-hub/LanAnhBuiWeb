@@ -115,46 +115,6 @@ const CourseSkillsSection = () => {
                     </div>
                 ) : (
                     <div className="space-y-16">
-                        {/* Skills Section */}
-                        {topics.length > 0 && (
-                            <div>
-                                <h3 className="font-heading text-3xl font-medium text-center mb-8 text-foreground">
-                                    Kỹ năng
-                                </h3>
-                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {topics.map((topic) => (
-                                        <div
-                                            key={topic.id}
-                                            className="bg-card rounded-sm border border-border/30 hover:border-primary/30 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-md"
-                                        >
-                                            {topic.image && (
-                                                <div className="h-48 overflow-hidden">
-                                                    <img
-                                                        src={topic.image}
-                                                        alt={topic.title}
-                                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className="p-6">
-                                                <div className="number-badge text-2xl mb-2">
-                                                    {topic.number}.
-                                                </div>
-                                                <h4 className="font-heading text-xl font-medium mb-3 text-foreground">
-                                                    {topic.title}
-                                                </h4>
-                                                {topic.description && (
-                                                    <p className="text-muted-foreground text-sm leading-relaxed">
-                                                        {topic.description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
                         {/* Content Section */}
                         {contents.length > 0 && (
                             <div>
