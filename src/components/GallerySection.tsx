@@ -30,7 +30,7 @@ const GallerySection = () => {
     const spanPattern = [
         "row-span-2", "row-span-1", "row-span-2", "row-span-1",
         "row-span-1", "row-span-1", "row-span-1", "row-span-2",
-        "row-span-1", "row-span-2", "row-span-1"
+        "row-span-1", "row-span-2", "row-span-1", "row-span-1"
     ];
 
     const galleryItems = galleryImages.map((imageUrl, index) => ({

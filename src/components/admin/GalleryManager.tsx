@@ -34,10 +34,10 @@ const GalleryManager = () => {
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         const currentTotal = galleryData.images.length + imageFiles.length;
-        const remainingSlots = 11 - currentTotal;
+        const remainingSlots = 12 - currentTotal;
 
         if (files.length > remainingSlots) {
-            alert(`Chỉ có thể thêm tối đa ${remainingSlots} ảnh nữa. Tổng cộng tối đa 11 ảnh.`);
+            alert(`Chỉ có thể thêm tối đa ${remainingSlots} ảnh nữa. Tổng cộng tối đa 12 ảnh.`);
             return;
         }
 
@@ -133,7 +133,7 @@ const GalleryManager = () => {
         return <div className="text-center py-8">Đang tải...</div>;
     }
 
-    const remainingSlots = 11 - galleryData.images.length - imageFiles.length;
+    const remainingSlots = 12 - galleryData.images.length - imageFiles.length;
 
     return (
         <div className="space-y-6">
@@ -142,7 +142,7 @@ const GalleryManager = () => {
                 <CardHeader>
                     <CardTitle>Tải lên ảnh Gallery</CardTitle>
                     <CardDescription>
-                        Tải lên tối đa 11 ảnh cho bộ sưu tập. Hiện tại: {galleryData.images.length}/11 ảnh
+                        Tải lên tối đa 12 ảnh cho bộ sưu tập. Hiện tại: {galleryData.images.length}/12 ảnh
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -158,7 +158,7 @@ const GalleryManager = () => {
                                 disabled={remainingSlots === 0 || uploading}
                             />
                             {remainingSlots === 0 && (
-                                <p className="text-sm text-destructive">Đã đạt giới hạn 11 ảnh. Xóa ảnh cũ để thêm mới.</p>
+                                <p className="text-sm text-destructive">Đã đạt giới hạn 12 ảnh. Xóa ảnh cũ để thêm mới.</p>
                             )}
                         </div>
 

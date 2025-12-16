@@ -13,6 +13,8 @@ interface FooterConfig {
   instagram: string;
   youtube: string;
   tiktok: string;
+  zalo: string;
+  messenger: string;
   copyright: string;
 }
 

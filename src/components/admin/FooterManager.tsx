@@ -18,6 +18,8 @@ interface FooterConfig {
     instagram: string;
     youtube: string;
     tiktok: string;
+    zalo: string;
+    messenger: string;
     copyright: string;
 }
 
@@ -36,6 +38,8 @@ const FooterManager = () => {
         instagram: "",
         youtube: "",
         tiktok: "",
+        zalo: "",
+        messenger: "",
         copyright: ""
     });
 
@@ -72,6 +76,8 @@ const FooterManager = () => {
             instagram: "",
             youtube: "",
             tiktok: "",
+            zalo: "",
+            messenger: "",
             copyright: ""
         });
         setEditingId(null);
@@ -90,6 +96,8 @@ const FooterManager = () => {
             instagram: footer.instagram,
             youtube: footer.youtube,
             tiktok: footer.tiktok || "",
+            zalo: footer.zalo || "",
+            messenger: footer.messenger || "",
             copyright: footer.copyright
         });
         setEditingId(footer.id || null);
@@ -113,6 +121,8 @@ const FooterManager = () => {
             instagram: "",
             youtube: "",
             tiktok: "",
+            zalo: "",
+            messenger: "",
             copyright: ""
         });
         setEditingId(null);
@@ -232,6 +242,26 @@ const FooterManager = () => {
                                         value={formData.tiktok}
                                         onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
                                         placeholder="https://tiktok.com/..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="zalo">Zalo URL</Label>
+                                    <Input
+                                        id="zalo"
+                                        value={formData.zalo}
+                                        onChange={(e) => setFormData({ ...formData, zalo: e.target.value })}
+                                        placeholder="https://zalo.me/..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="messenger">Messenger URL</Label>
+                                    <Input
+                                        id="messenger"
+                                        value={formData.messenger}
+                                        onChange={(e) => setFormData({ ...formData, messenger: e.target.value })}
+                                        placeholder="https://m.me/..."
                                     />
                                 </div>
                             </div>
@@ -363,6 +393,32 @@ const FooterManager = () => {
                                                                 className="text-xs text-primary hover:underline truncate block"
                                                             >
                                                                 {footer.tiktok}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {footer.zalo && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Zalo:</span>
+                                                            <a
+                                                                href={footer.zalo}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.zalo}
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                    {footer.messenger && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Messenger:</span>
+                                                            <a
+                                                                href={footer.messenger}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-xs text-primary hover:underline truncate block"
+                                                            >
+                                                                {footer.messenger}
                                                             </a>
                                                         </div>
                                                     )}
