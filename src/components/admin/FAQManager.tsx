@@ -101,12 +101,12 @@ const FAQManager = () => {
                             />
                         </div>
 
-                        <div className="flex gap-2">
-                            <Button type="submit">
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <Button type="submit" className="w-full sm:w-auto">
                                 {editingId ? "Cập nhật" : "Thêm mới"}
                             </Button>
                             {editingId && (
-                                <Button type="button" variant="outline" onClick={handleCancel}>
+                                <Button type="button" variant="outline" onClick={handleCancel} className="w-full sm:w-auto">
                                     Hủy
                                 </Button>
                             )}
@@ -134,16 +134,23 @@ const FAQManager = () => {
                                     key={faq.id}
                                     className="p-4 border border-border rounded-lg space-y-2"
                                 >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div className="flex-1">
-                                            <h4 className="font-medium text-foreground">{faq.question}</h4>
-                                            <p className="text-sm text-muted-foreground mt-1">{faq.answer}</p>
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3">
+                                        <div className="flex-1 min-w-0 w-full space-y-2">
+                                            <div>
+                                                <span className="text-xs text-muted-foreground">Câu hỏi:</span>
+                                                <h4 className="font-medium text-foreground text-sm sm:text-base">{faq.question}</h4>
+                                            </div>
+                                            <div>
+                                                <span className="text-xs text-muted-foreground">Câu trả lời:</span>
+                                                <p className="text-xs sm:text-sm text-muted-foreground">{faq.answer}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                             <Button
                                                 size="sm"
                                                 variant="outline"
                                                 onClick={() => handleEdit(faq)}
+                                                className="flex-1 sm:flex-none"
                                             >
                                                 <Pencil className="w-4 h-4" />
                                             </Button>
@@ -151,6 +158,7 @@ const FAQManager = () => {
                                                 size="sm"
                                                 variant="destructive"
                                                 onClick={() => handleDelete(faq.id!)}
+                                                className="flex-1 sm:flex-none"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </Button>

@@ -309,41 +309,41 @@ const FooterManager = () => {
                             footers.map((footer) => (
                                 <div
                                     key={footer.id}
-                                    className="p-4 border border-border rounded-lg space-y-3"
+                                    className="p-3 border border-border rounded-lg space-y-2"
                                 >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div className="flex-1 space-y-2">
+                                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                        <div className="flex-1 min-w-0 w-full space-y-2">
                                             <div>
-                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
-                                                <p className="text-sm text-foreground font-semibold">{footer.title}</p>
+                                                <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                <p className="text-sm font-semibold">{footer.title}</p>
                                             </div>
                                             <div>
-                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                <p className="text-sm text-foreground">{footer.description}</p>
+                                                <span className="text-xs text-muted-foreground">Mô tả:</span>
+                                                <p className="text-sm">{footer.description}</p>
                                             </div>
-                                            <div className="grid md:grid-cols-2 gap-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                 <div>
-                                                    <span className="text-sm font-medium text-muted-foreground">Email:</span>
-                                                    <p className="text-sm text-foreground">{footer.email}</p>
+                                                    <span className="text-xs text-muted-foreground">Email:</span>
+                                                    <p className="text-sm truncate">{footer.email}</p>
                                                 </div>
                                                 <div>
-                                                    <span className="text-sm font-medium text-muted-foreground">Phone:</span>
-                                                    <p className="text-sm text-foreground">{footer.phone}</p>
+                                                    <span className="text-xs text-muted-foreground">Phone:</span>
+                                                    <p className="text-sm">{footer.phone}</p>
                                                 </div>
                                             </div>
                                             {footer.address && (
                                                 <div>
-                                                    <span className="text-sm font-medium text-muted-foreground">Địa chỉ:</span>
-                                                    <p className="text-sm text-foreground">{footer.address}</p>
+                                                    <span className="text-xs text-muted-foreground">Địa chỉ:</span>
+                                                    <p className="text-sm">{footer.address}</p>
                                                 </div>
                                             )}
                                             <div>
-                                                <span className="text-sm font-medium text-muted-foreground">Copyright:</span>
-                                                <p className="text-sm text-foreground">{footer.copyright}</p>
+                                                <span className="text-xs text-muted-foreground">Copyright:</span>
+                                                <p className="text-sm">{footer.copyright}</p>
                                             </div>
                                             <div>
                                                 <span className="text-sm font-medium text-muted-foreground mb-2 block">Mạng xã hội:</span>
-                                                <div className="grid grid-cols-2 gap-2">
+                                                <div className="space-y-2">
                                                     {footer.facebook && (
                                                         <div>
                                                             <span className="text-xs text-muted-foreground">Facebook:</span>
@@ -425,11 +425,12 @@ const FooterManager = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                             <Button
                                                 size="sm"
                                                 variant="outline"
                                                 onClick={() => handleEdit(footer)}
+                                                className="flex-1 sm:flex-none"
                                             >
                                                 <Pencil className="w-4 h-4" />
                                             </Button>
@@ -437,6 +438,7 @@ const FooterManager = () => {
                                                 size="sm"
                                                 variant="destructive"
                                                 onClick={() => handleDelete(footer.id!)}
+                                                className="flex-1 sm:flex-none"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </Button>

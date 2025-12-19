@@ -166,19 +166,19 @@ const GalleryManager = () => {
                         {imagePreviews.length > 0 && (
                             <div className="space-y-2">
                                 <Label>Ảnh đã chọn ({imagePreviews.length})</Label>
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                     {imagePreviews.map((preview, index) => (
                                         <div key={index} className="relative group">
                                             <img
                                                 src={preview}
                                                 alt={`Preview ${index + 1}`}
-                                                className="w-full h-32 object-cover rounded-lg border border-border"
+                                                className="w-full h-40 sm:h-32 object-cover rounded-lg border border-border"
                                             />
                                             <Button
                                                 type="button"
                                                 size="sm"
                                                 variant="destructive"
-                                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity h-8 w-8 p-0"
                                                 onClick={() => handleRemovePreview(index)}
                                             >
                                                 <X className="w-4 h-4" />
@@ -211,19 +211,20 @@ const GalleryManager = () => {
                             Chưa có ảnh nào. Tải lên ảnh đầu tiên!
                         </p>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                             {galleryData.images.map((imageUrl, index) => (
                                 <div key={index} className="relative group">
                                     <img
                                         src={imageUrl}
                                         alt={`Gallery ${index + 1}`}
-                                        className="w-full h-32 object-cover rounded-lg border border-border"
+                                        className="w-full h-40 sm:h-32 object-cover rounded-lg border border-border"
                                     />
-                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                         <Button
                                             size="sm"
                                             variant="destructive"
                                             onClick={() => handleDeleteImage(index)}
+                                            className="h-8 w-8 p-0"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </Button>

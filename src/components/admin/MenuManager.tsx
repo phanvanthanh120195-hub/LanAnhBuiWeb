@@ -216,7 +216,7 @@ const MenuManager = () => {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="label">Tên menu</Label>
                                 <Input
@@ -240,12 +240,12 @@ const MenuManager = () => {
                             </div>
                         </div>
 
-                        <div className="flex gap-2">
-                            <Button type="submit">
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <Button type="submit" className="w-full sm:w-auto">
                                 {editingId ? "Cập nhật" : "Thêm mới"}
                             </Button>
                             {editingId && (
-                                <Button type="button" variant="outline" onClick={handleCancel}>
+                                <Button type="button" variant="outline" onClick={handleCancel} className="w-full sm:w-auto">
                                     Hủy
                                 </Button>
                             )}
@@ -271,28 +271,38 @@ const MenuManager = () => {
                             menuItems.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="flex items-center gap-3 p-3 border border-border rounded-lg"
+                                    className="p-3 border border-border rounded-lg space-y-2"
                                 >
-                                    <GripVertical className="w-5 h-5 text-muted-foreground" />
-                                    <div className="flex-1">
-                                        <p className="font-medium">{item.label}</p>
-                                        <p className="text-sm text-muted-foreground">{item.href}</p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => handleEdit(item)}
-                                        >
-                                            <Pencil className="w-4 h-4" />
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            variant="destructive"
-                                            onClick={() => handleDelete(item.id!)}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                        <GripVertical className="w-5 h-5 text-muted-foreground hidden sm:block" />
+                                        <div className="flex-1 min-w-0 w-full space-y-1">
+                                            <div>
+                                                <span className="text-xs text-muted-foreground">Tên menu:</span>
+                                                <p className="font-medium text-sm sm:text-base">{item.label}</p>
+                                            </div>
+                                            <div>
+                                                <span className="text-xs text-muted-foreground">Link:</span>
+                                                <p className="text-xs sm:text-sm text-muted-foreground truncate">{item.href}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2 w-full sm:w-auto">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => handleEdit(item)}
+                                                className="flex-1 sm:flex-none"
+                                            >
+                                                <Pencil className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="destructive"
+                                                onClick={() => handleDelete(item.id!)}
+                                                className="flex-1 sm:flex-none"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             ))

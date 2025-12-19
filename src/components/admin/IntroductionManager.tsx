@@ -508,13 +508,15 @@ const IntroductionManager = () => {
     return (
         <div className="space-y-6">
             <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as "header" | "intro" | "forWho" | "bankInfo" | "youtube")}>
-                <TabsList>
-                    <TabsTrigger value="header">Đầu trang</TabsTrigger>
-                    <TabsTrigger value="youtube">Youtube</TabsTrigger>
-                    <TabsTrigger value="intro">Xin chào</TabsTrigger>
-                    <TabsTrigger value="forWho">Dành cho ai</TabsTrigger>
-                    <TabsTrigger value="bankInfo">Ngân hàng</TabsTrigger>
-                </TabsList>
+                <div className="overflow-x-auto -mx-2 sm:mx-0">
+                    <TabsList className="inline-flex w-full sm:w-auto min-w-full sm:min-w-0 h-auto flex-nowrap sm:flex-wrap">
+                        <TabsTrigger value="header" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Đầu trang</TabsTrigger>
+                        <TabsTrigger value="youtube" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Youtube</TabsTrigger>
+                        <TabsTrigger value="intro" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Xin chào</TabsTrigger>
+                        <TabsTrigger value="forWho" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Dành cho ai</TabsTrigger>
+                        <TabsTrigger value="bankInfo" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Ngân hàng</TabsTrigger>
+                    </TabsList>
+                </div>
 
                 {/* Header Tab */}
                 <TabsContent value="header" className="mt-6">
@@ -707,31 +709,32 @@ const IntroductionManager = () => {
                                         </CardHeader>
                                         <CardContent>
                                             {section1.title ? (
-                                                <div className="p-4 border border-border rounded-lg space-y-3">
-                                                    <div className="flex items-start justify-between gap-4">
-                                                        <div className="flex-1 space-y-2">
+                                                <div className="p-3 border border-border rounded-lg space-y-2">
+                                                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                                        <div className="flex-1 min-w-0 w-full space-y-2">
                                                             <div>
-                                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
-                                                                <p className="text-sm text-foreground">{section1.title}</p>
+                                                                <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                                <p className="text-sm">{section1.title}</p>
                                                             </div>
                                                             <div>
-                                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                                <p className="text-sm text-foreground">{section1.description}</p>
+                                                                <span className="text-xs text-muted-foreground">Mô tả:</span>
+                                                                <p className="text-sm">{section1.description}</p>
                                                             </div>
                                                             {section1.imageUrl && (
                                                                 <div>
-                                                                    <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
-                                                                    <img src={section1.imageUrl} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded border" />
+                                                                    <span className="text-xs text-muted-foreground">Hình ảnh:</span>
+                                                                    <img src={section1.imageUrl} alt="Preview" className="mt-2 w-full sm:w-32 h-32 object-cover rounded border" />
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="flex gap-2">
+                                                        <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                                             <Button
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={() => {
                                                                     // Data is already loaded
                                                                 }}
+                                                                className="flex-1 sm:flex-none"
                                                             >
                                                                 <Pencil className="w-4 h-4" />
                                                             </Button>
@@ -746,6 +749,7 @@ const IntroductionManager = () => {
                                                                         alert("Đã xóa thành công!");
                                                                     }
                                                                 }}
+                                                                className="flex-1 sm:flex-none"
                                                             >
                                                                 <Trash2 className="w-4 h-4" />
                                                             </Button>
@@ -834,31 +838,32 @@ const IntroductionManager = () => {
                                         </CardHeader>
                                         <CardContent>
                                             {section2.title ? (
-                                                <div className="p-4 border border-border rounded-lg space-y-3">
-                                                    <div className="flex items-start justify-between gap-4">
-                                                        <div className="flex-1 space-y-2">
+                                                <div className="p-3 border border-border rounded-lg space-y-2">
+                                                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                                        <div className="flex-1 min-w-0 w-full space-y-2">
                                                             <div>
-                                                                <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
-                                                                <p className="text-sm text-foreground">{section2.title}</p>
+                                                                <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                                <p className="text-sm">{section2.title}</p>
                                                             </div>
                                                             <div>
-                                                                <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                                <p className="text-sm text-foreground">{section2.description}</p>
+                                                                <span className="text-xs text-muted-foreground">Mô tả:</span>
+                                                                <p className="text-sm">{section2.description}</p>
                                                             </div>
                                                             {section2.imageUrl && (
                                                                 <div>
-                                                                    <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
-                                                                    <img src={section2.imageUrl} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded border" />
+                                                                    <span className="text-xs text-muted-foreground">Hình ảnh:</span>
+                                                                    <img src={section2.imageUrl} alt="Preview" className="mt-2 w-full sm:w-32 h-32 object-cover rounded border" />
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="flex gap-2">
+                                                        <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                                             <Button
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={() => {
                                                                     // Data is already loaded
                                                                 }}
+                                                                className="flex-1 sm:flex-none"
                                                             >
                                                                 <Pencil className="w-4 h-4" />
                                                             </Button>
@@ -873,6 +878,7 @@ const IntroductionManager = () => {
                                                                         alert("Đã xóa thành công!");
                                                                     }
                                                                 }}
+                                                                className="flex-1 sm:flex-none"
                                                             >
                                                                 <Trash2 className="w-4 h-4" />
                                                             </Button>
@@ -983,37 +989,38 @@ const IntroductionManager = () => {
                                 </CardHeader>
                                 <CardContent>
                                     {forWhoData.title ? (
-                                        <div className="p-4 border border-border rounded-lg space-y-3">
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div className="flex-1 space-y-2">
+                                        <div className="p-3 border border-border rounded-lg space-y-2">
+                                            <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                                <div className="flex-1 min-w-0 w-full space-y-2">
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
-                                                        <p className="text-sm text-foreground">{forWhoData.title}</p>
+                                                        <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                        <p className="text-sm">{forWhoData.title}</p>
                                                     </div>
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Danh sách:</span>
-                                                        <ul className="list-disc list-inside text-sm text-foreground">
+                                                        <span className="text-xs text-muted-foreground">Danh sách:</span>
+                                                        <ul className="list-disc list-inside text-sm space-y-1">
                                                             {forWhoData.items.map((item, idx) => (
                                                                 <li key={idx}>{item}</li>
                                                             ))}
                                                         </ul>
                                                     </div>
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Hình ảnh:</span>
-                                                        <div className="flex gap-2 mt-2">
+                                                        <span className="text-xs text-muted-foreground">Hình ảnh:</span>
+                                                        <div className="flex flex-wrap gap-2 mt-2">
                                                             {forWhoData.image1 && <img src={forWhoData.image1} alt="Image 1" className="w-24 h-24 object-cover rounded border" />}
                                                             {forWhoData.image2 && <img src={forWhoData.image2} alt="Image 2" className="w-24 h-24 object-cover rounded border" />}
                                                             {forWhoData.image3 && <img src={forWhoData.image3} alt="Image 3" className="w-24 h-24 object-cover rounded border" />}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-2">
+                                                <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                                     <Button
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={() => {
                                                             // Data is already loaded
                                                         }}
+                                                        className="flex-1 sm:flex-none"
                                                     >
                                                         <Pencil className="w-4 h-4" />
                                                     </Button>
@@ -1028,6 +1035,7 @@ const IntroductionManager = () => {
                                                                 alert("Đã xóa thành công!");
                                                             }
                                                         }}
+                                                        className="flex-1 sm:flex-none"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </Button>
@@ -1194,11 +1202,12 @@ const IntroductionManager = () => {
                                                 const showDisplayRadio = activeBanks.length >= 2 && bank.status === "active";
 
                                                 return (
-                                                    <div key={bank.id} className="p-4 border border-border rounded-lg">
-                                                        <div className="flex items-start justify-between gap-4">
-                                                            <div className="flex-1 space-y-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    <p className="font-medium">{bank.bankName}</p>
+                                                    <div key={bank.id} className="p-3 border border-border rounded-lg space-y-2">
+                                                        <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                                            <div className="flex-1 min-w-0 w-full space-y-2">
+                                                                <div className="flex flex-wrap items-center gap-2">
+                                                                    <span className="text-xs text-muted-foreground">Ngân hàng:</span>
+                                                                    <p className="font-medium text-sm">{bank.bankName}</p>
                                                                     <span className={`text-xs px-2 py-1 rounded ${bank.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}>
                                                                         {bank.status}
                                                                     </span>
@@ -1208,14 +1217,22 @@ const IntroductionManager = () => {
                                                                         </span>
                                                                     )}
                                                                 </div>
-                                                                <p className="text-sm text-muted-foreground">
-                                                                    {bank.accountNumber} - {bank.accountName}
-                                                                </p>
+                                                                <div>
+                                                                    <span className="text-xs text-muted-foreground">Số tài khoản:</span>
+                                                                    <p className="text-sm">{bank.accountNumber}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <span className="text-xs text-muted-foreground">Tên tài khoản:</span>
+                                                                    <p className="text-sm">{bank.accountName}</p>
+                                                                </div>
                                                                 {bank.qrCodeUrl && (
-                                                                    <img src={bank.qrCodeUrl} alt="QR" className="w-24 h-24 object-cover rounded border mt-2" />
+                                                                    <div>
+                                                                        <span className="text-xs text-muted-foreground">QR Code:</span>
+                                                                        <img src={bank.qrCodeUrl} alt="QR" className="w-32 h-32 object-cover rounded border mt-2" />
+                                                                    </div>
                                                                 )}
                                                             </div>
-                                                            <div className="flex flex-col gap-2">
+                                                            <div className="flex flex-col gap-2 w-full sm:w-auto">
                                                                 {showDisplayRadio && (
                                                                     <label className="flex items-center gap-2 text-sm cursor-pointer">
                                                                         <input
@@ -1228,11 +1245,12 @@ const IntroductionManager = () => {
                                                                         <span>Hiển thị</span>
                                                                     </label>
                                                                 )}
-                                                                <div className="flex gap-2">
+                                                                <div className="flex gap-2 w-full sm:w-auto">
                                                                     <Button
                                                                         size="sm"
                                                                         variant="outline"
                                                                         onClick={() => handleToggleStatus(bank.id!)}
+                                                                        className="flex-1 sm:flex-none"
                                                                     >
                                                                         {bank.status === "active" ? "Inactive" : "Active"}
                                                                     </Button>
@@ -1240,6 +1258,7 @@ const IntroductionManager = () => {
                                                                         size="sm"
                                                                         variant="outline"
                                                                         onClick={() => handleEditBank(bank)}
+                                                                        className="flex-1 sm:flex-none"
                                                                     >
                                                                         <Pencil className="w-4 h-4" />
                                                                     </Button>
@@ -1247,6 +1266,7 @@ const IntroductionManager = () => {
                                                                         size="sm"
                                                                         variant="destructive"
                                                                         onClick={() => handleDeleteBank(bank.id!)}
+                                                                        className="flex-1 sm:flex-none"
                                                                     >
                                                                         <Trash2 className="w-4 h-4" />
                                                                     </Button>
@@ -1326,19 +1346,19 @@ const IntroductionManager = () => {
                                 </CardHeader>
                                 <CardContent>
                                     {youtubeData.title ? (
-                                        <div className="p-4 border border-border rounded-lg space-y-3">
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div className="flex-1 space-y-2">
+                                        <div className="p-3 border border-border rounded-lg space-y-2">
+                                            <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
+                                                <div className="flex-1 min-w-0 w-full space-y-2">
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Tiêu đề:</span>
-                                                        <p className="text-sm text-foreground">{youtubeData.title}</p>
+                                                        <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                        <p className="text-sm">{youtubeData.title}</p>
                                                     </div>
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Mô tả:</span>
-                                                        <p className="text-sm text-foreground">{youtubeData.description}</p>
+                                                        <span className="text-xs text-muted-foreground">Mô tả:</span>
+                                                        <p className="text-sm">{youtubeData.description}</p>
                                                     </div>
                                                     <div>
-                                                        <span className="text-sm font-medium text-muted-foreground">Link:</span>
+                                                        <span className="text-xs text-muted-foreground">Link:</span>
                                                         <a
                                                             href={youtubeData.youtubeLink}
                                                             target="_blank"
@@ -1349,13 +1369,14 @@ const IntroductionManager = () => {
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-2">
+                                                <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
                                                     <Button
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={() => {
                                                             // Data is already loaded
                                                         }}
+                                                        className="flex-1 sm:flex-none"
                                                     >
                                                         <Pencil className="w-4 h-4" />
                                                     </Button>
@@ -1369,6 +1390,7 @@ const IntroductionManager = () => {
                                                                 alert("Đã xóa thành công!");
                                                             }
                                                         }}
+                                                        className="flex-1 sm:flex-none"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </Button>

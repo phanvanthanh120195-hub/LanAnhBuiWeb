@@ -388,13 +388,15 @@ const CourseManager = () => {
     return (
         <div className="space-y-6">
             <Tabs value={courseType} onValueChange={(v) => setCourseType(v as CourseTypeUnion)}>
-                <TabsList>
-                    <TabsTrigger value="illustration">Diễn họa thời trang</TabsTrigger>
-                    <TabsTrigger value="sketch">Phác thảo thời trang</TabsTrigger>
-                    <TabsTrigger value="ipad">Diễn họa iPad</TabsTrigger>
-                    <TabsTrigger value="designThinking">Tư duy thiết kế</TabsTrigger>
-                    <TabsTrigger value="basicSewing">Cắt may cơ bản</TabsTrigger>
-                </TabsList>
+                <div className="overflow-x-auto -mx-2 sm:mx-0">
+                    <TabsList className="inline-flex w-full sm:w-auto min-w-full sm:min-w-0 h-auto flex-wrap">
+                        <TabsTrigger value="illustration" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Diễn họa thời trang</TabsTrigger>
+                        <TabsTrigger value="sketch" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Phác thảo thời trang</TabsTrigger>
+                        <TabsTrigger value="ipad" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Diễn họa iPad</TabsTrigger>
+                        <TabsTrigger value="designThinking" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Tư duy thiết kế</TabsTrigger>
+                        <TabsTrigger value="basicSewing" className="flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3">Cắt may cơ bản</TabsTrigger>
+                    </TabsList>
+                </div>
 
                 <TabsContent value={courseType} className="space-y-6 mt-6">
                     <Card>
@@ -732,42 +734,50 @@ const CourseManager = () => {
                                     topics.map((topic) => (
                                         <div
                                             key={topic.id}
-                                            className="flex items-center gap-4 p-4 border border-border rounded-lg"
+                                            className="p-3 border border-border rounded-lg space-y-2"
                                         >
-                                            {topic.image ? (
-                                                <img
-                                                    src={topic.image}
-                                                    alt={topic.title}
-                                                    className="w-16 h-16 object-cover rounded"
-                                                />
-                                            ) : (
-                                                <div className="w-16 h-16 bg-secondary rounded flex items-center justify-center">
-                                                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
-                                                </div>
-                                            )}
-                                            <div className="flex-1">
-                                                <p className="font-medium">
-                                                    {topic.number}. {topic.title}
-                                                </p>
-                                                {topic.label && (
-                                                    <p className="text-sm text-muted-foreground">{topic.label}</p>
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                                {topic.image ? (
+                                                    <img
+                                                        src={topic.image}
+                                                        alt={topic.title}
+                                                        className="w-full sm:w-16 h-32 sm:h-16 object-cover rounded flex-shrink-0"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full sm:w-16 h-32 sm:h-16 bg-secondary rounded flex items-center justify-center flex-shrink-0">
+                                                        <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                                                    </div>
                                                 )}
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() => handleEdit(topic)}
-                                                >
-                                                    <Pencil className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() => handleDelete(topic.id!)}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
+                                                <div className="flex-1 min-w-0 w-full space-y-1">
+                                                    <div>
+                                                        <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                        <p className="font-medium text-sm">{topic.number}. {topic.title}</p>
+                                                    </div>
+                                                    {topic.label && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Nhãn:</span>
+                                                            <p className="text-xs text-muted-foreground">{topic.label}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex gap-2 w-full sm:w-auto">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => handleEdit(topic)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() => handleDelete(topic.id!)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -794,46 +804,54 @@ const CourseManager = () => {
                                     courseContents.map((content) => (
                                         <div
                                             key={content.id}
-                                            className="flex items-center gap-4 p-4 border border-border rounded-lg"
+                                            className="p-3 border border-border rounded-lg space-y-2"
                                         >
-                                            {content.imageUrl ? (
-                                                <img
-                                                    src={content.imageUrl}
-                                                    alt="Content image"
-                                                    className="w-16 h-16 object-cover rounded"
-                                                />
-                                            ) : (
-                                                <div className="w-16 h-16 bg-secondary rounded flex items-center justify-center">
-                                                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
-                                                </div>
-                                            )}
-                                            <div className="flex-1">
-                                                {content.title && (
-                                                    <p className="text-sm font-medium text-foreground mb-2">
-                                                        {content.number} - {content.title}
-                                                    </p>
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                                {content.imageUrl ? (
+                                                    <img
+                                                        src={content.imageUrl}
+                                                        alt="Content image"
+                                                        className="w-full sm:w-16 h-32 sm:h-16 object-cover rounded flex-shrink-0"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full sm:w-16 h-32 sm:h-16 bg-secondary rounded flex items-center justify-center flex-shrink-0">
+                                                        <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                                                    </div>
                                                 )}
-                                                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                                                    {content.items.map((item, idx) => (
-                                                        <li key={idx}>{item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() => handleEditContent(content)}
-                                                >
-                                                    <Pencil className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() => handleDeleteContent(content.id!)}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
+                                                <div className="flex-1 min-w-0 w-full space-y-1">
+                                                    {content.title && (
+                                                        <div>
+                                                            <span className="text-xs text-muted-foreground">Tiêu đề:</span>
+                                                            <p className="text-sm font-medium">{content.number} - {content.title}</p>
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        <span className="text-xs text-muted-foreground">Nội dung:</span>
+                                                        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                                                            {content.items.map((item, idx) => (
+                                                                <li key={idx}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 w-full sm:w-auto">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => handleEditContent(content)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() => handleDeleteContent(content.id!)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -860,47 +878,55 @@ const CourseManager = () => {
                                     tuitions.map((tuitionItem) => (
                                         <div
                                             key={tuitionItem.id}
-                                            className="flex items-center gap-4 p-4 border border-border rounded-lg"
+                                            className="p-3 border border-border rounded-lg space-y-2"
                                         >
-                                            {tuitionItem.imageUrl ? (
-                                                <img
-                                                    src={tuitionItem.imageUrl}
-                                                    alt="Tuition"
-                                                    className="w-16 h-16 object-cover rounded"
-                                                />
-                                            ) : (
-                                                <div className="w-16 h-16 bg-secondary rounded flex items-center justify-center">
-                                                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                                {tuitionItem.imageUrl ? (
+                                                    <img
+                                                        src={tuitionItem.imageUrl}
+                                                        alt="Tuition"
+                                                        className="w-full sm:w-16 h-32 sm:h-16 object-cover rounded flex-shrink-0"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full sm:w-16 h-32 sm:h-16 bg-secondary rounded flex items-center justify-center flex-shrink-0">
+                                                        <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                                                    </div>
+                                                )}
+                                                <div className="flex-1 min-w-0 w-full space-y-1">
+                                                    <div>
+                                                        <span className="text-xs text-muted-foreground">Hình thức:</span>
+                                                        <p className="font-medium text-sm">{tuitionItem.mode === "online" ? "Online" : "Offline"}</p>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-xs text-muted-foreground">Học phí:</span>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            {tuitionItem.originalPrice.toLocaleString('vi-VN')} VNĐ
+                                                            {tuitionItem.discountPercent > 0 && (
+                                                                <span className="text-primary ml-2">
+                                                                    (-{tuitionItem.discountPercent}%) → {(tuitionItem.originalPrice * (1 - tuitionItem.discountPercent / 100)).toLocaleString('vi-VN')} VNĐ
+                                                                </span>
+                                                            )}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            )}
-                                            <div className="flex-1">
-                                                <p className="font-medium">
-                                                    {tuitionItem.mode === "online" ? "Online" : "Offline"}
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {tuitionItem.originalPrice.toLocaleString('vi-VN')} VNĐ
-                                                    {tuitionItem.discountPercent > 0 && (
-                                                        <span className="text-primary ml-2">
-                                                            (-{tuitionItem.discountPercent}%) → {(tuitionItem.originalPrice * (1 - tuitionItem.discountPercent / 100)).toLocaleString('vi-VN')} VNĐ
-                                                        </span>
-                                                    )}
-                                                </p>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() => handleEditTuition(tuitionItem)}
-                                                >
-                                                    <Pencil className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() => handleDeleteTuition(tuitionItem.id!)}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
+                                                <div className="flex gap-2 w-full sm:w-auto">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => handleEditTuition(tuitionItem)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() => handleDeleteTuition(tuitionItem.id!)}
+                                                        className="flex-1 sm:flex-none"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     ))

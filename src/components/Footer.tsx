@@ -120,13 +120,23 @@ const Footer = () => {
           <div className="flex justify-center md:justify-end">
             {bankData ? (
               <div className="border-2 border-primary/30 rounded-lg p-8 bg-card shadow-elegant max-w-sm w-full">
-                <div className="text-center space-y-4">
-                  <div className="flex justify-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <span className="text-primary font-bold text-xl">{getBankAbbreviation(bankData.bankName)}</span>
-                    </div>
+                <div className="space-y-4">
+                  {/* QR Code and Bank Name Row */}
+                  <div className="flex items-center gap-4">
+                    {bankData.qrCodeUrl ? (
+                      <img
+                        src={bankData.qrCodeUrl}
+                        alt="QR Code"
+                        className="w-40 h-40 object-contain rounded-lg border border-border"
+                      />
+                    ) : (
+                      <div className="w-40 h-40 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <span className="text-primary font-bold text-xl">{getBankAbbreviation(bankData.bankName)}</span>
+                      </div>
+                    )}
+                    <h4 className="font-bold text-primary text-2xl flex-1">{bankData.bankName.toUpperCase()}</h4>
                   </div>
-                  <h4 className="font-bold text-primary text-lg">{bankData.bankName.toUpperCase()}</h4>
+                  {/* Account Details */}
                   <div className="space-y-2 text-left">
                     <p className="font-semibold">Tên TK: {bankData.accountName}</p>
                     <p className="font-semibold">Số TK: {bankData.accountNumber}</p>
